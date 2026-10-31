@@ -1,0 +1,25 @@
+{
+  "environment": "lan-testing",
+  "api": {
+    "baseUrl": "http://192.168.1.100:3000/api/v1",
+    "webSocketUrl": "ws://192.168.1.100:3000/ws",
+    "timeoutMs": 8000,
+    "retryAttempts": 8,
+    "retryBackoffMs": 1500
+  },
+  "auth": {
+    "enabled": true,
+    "defaultUser": "analyst-02",
+    "token": "token-analyst-beta-4412"
+  },
+  "simulation": {
+    "enabled": true,
+    "autoInjectTelemetry": true,
+    "defaultScenario": "lateral-movement"
+  },
+  "ai": {
+    "provider": "gemini-via-server",
+    "model": "gemini-2.5-flash",
+    "offlineFallback": true
+  }
+}

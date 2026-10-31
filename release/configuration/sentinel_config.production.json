@@ -1,0 +1,35 @@
+{
+  "environment": "production",
+  "api": {
+    "baseUrl": "https://sentinel-core.aegis-cyber.internal/api/v1",
+    "webSocketUrl": "wss://sentinel-core.aegis-cyber.internal/ws",
+    "timeoutMs": 10000,
+    "retryAttempts": 10,
+    "retryBackoffMs": 2000,
+    "rateLimiting": {
+      "maxRequestsPerMinute": 120,
+      "circuitBreakerThreshold": 5
+    }
+  },
+  "auth": {
+    "enabled": true,
+    "tokenHeader": "Authorization",
+    "tokenPrefix": "Bearer",
+    "sessionExpirySeconds": 28800
+  },
+  "simulation": {
+    "enabled": false,
+    "allowManualOverride": false
+  },
+  "ai": {
+    "provider": "gemini-via-server",
+    "model": "gemini-2.5-flash",
+    "enforceServerKeyIsolation": true,
+    "sanitizePrompts": true,
+    "auditAiQueries": true
+  },
+  "cryptography": {
+    "dossierHashAlgorithm": "SHA-256",
+    "tamperSealEnforced": true
+  }
+}

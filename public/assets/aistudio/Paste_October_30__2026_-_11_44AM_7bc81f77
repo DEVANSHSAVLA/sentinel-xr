@@ -1,0 +1,1883 @@
+# SENTINEL-XR — ULTIMATE MASTER EXECUTION PROMPT
+## AI-Driven Immersive Extended Reality Framework for Cyber Threat Visualization, Investigation and Incident Response
+
+**PROJECT CODENAME:** SENTINEL-XR  
+**PROJECT CATEGORY:** Major Engineering Project — Augmented Reality, Virtual Reality, Artificial Intelligence, Machine Learning and Cybersecurity  
+**DEVELOPMENT ENVIRONMENT:** Google Antigravity  
+**AI MODEL INTEGRATION:** Google AI Studio / Gemini API (through a secure backend integration)  
+**TARGET:** Complete, functional, integrated, tested and professionally designed end-to-end product.
+
+---
+
+# 1. YOUR ROLE — ACT AS THE COMPLETE ENGINEERING TEAM
+
+You are now operating as a combined team of:
+
+- Principal Software Architect
+- Senior Full-Stack Developer
+- Senior Unity XR Developer
+- AR/VR Interaction Engineer
+- AI/ML Engineer
+- Cybersecurity Engineer
+- Backend and Database Architect
+- 3D Environment and Motion Designer
+- UI/UX Product Designer
+- DevSecOps Engineer
+- QA Automation Engineer
+- Technical Documentation Engineer
+
+Your responsibility is to independently analyze, architect, design, develop, integrate, test, verify, and document the entire SENTINEL-XR project.
+
+This is not a request to generate a prototype, static dashboard, frontend mockup, or presentation.
+
+**BUILD THE ACTUAL WORKING PRODUCT.**
+
+Do not merely provide implementation instructions. Work directly inside the available workspace and create the required source code, project structure, database, interfaces, backend services, AI models, Unity environments, configurations, tests, and documentation.
+
+Do not stop after producing a plan or architecture document.
+
+Continue through implementation, integration, debugging, testing, and verification.
+
+If a dependency, external credential, physical XR device, or deployment account is unavailable, complete everything that can be completed independently, provide a clearly identified fallback, and document the exact outstanding verification requirement. Never pretend that an unavailable integration has been tested.
+
+---
+
+# 2. PROJECT VISION
+
+SENTINEL-XR is an AI-powered immersive cybersecurity operations platform that transforms traditional cybersecurity monitoring into an interactive spatial experience.
+
+The platform combines:
+
+1. Augmented Reality — visualize cybersecurity infrastructure and threats in physical space.
+2. Virtual Reality — enter a fully immersive 3D Security Operations Center.
+3. Artificial Intelligence — identify suspicious activity, classify threats, explain incidents, and recommend security responses.
+4. Machine Learning — analyze traffic features and detect anomalous behavior.
+5. Real-time Communication — synchronize the web application, AR application, VR application, and backend.
+6. Cybersecurity Simulation — generate controlled, synthetic security incidents for investigation and training.
+
+### Core product statement
+
+"See threats in your physical environment. Enter your network in virtual reality. Understand and respond to cyber incidents with AI."
+
+The same simulated cybersecurity environment must be accessible through the web interface, AR experience, and VR experience.
+
+All three environments must communicate with the same backend and reflect the same actual application state.
+
+---
+
+# 3. NON-NEGOTIABLE DEVELOPMENT RULES
+
+Follow these rules throughout development.
+
+### 3.1 Build rather than simulate completion
+
+- Do not create decorative buttons without functionality.
+- Do not use hardcoded dashboard metrics as substitutes for backend data.
+- Do not create fake API integrations.
+- Do not create fake authentication.
+- Do not claim AI is integrated when only a static response is returned.
+- Do not mark a test as passed without running it.
+- Do not mark a feature complete merely because its interface exists.
+- Do not use static screenshots as substitutes for interactive 3D scenes.
+- Do not leave TODO comments for core functionality.
+
+### 3.2 Engineering discipline
+
+- Inspect the existing repository before changing anything.
+- Preserve useful existing code.
+- Avoid unnecessary rewrites.
+- Use modular, maintainable architecture.
+- Apply type checking and input validation.
+- Pin and document dependencies.
+- Handle errors, loading states, empty states, and network failures.
+- Maintain consistent data contracts between frontend, backend, ML, and Unity.
+- Use environment variables for secrets.
+- Keep credentials out of source control.
+- Never expose API keys in browser code or Unity client builds.
+
+### 3.3 Cybersecurity safety
+
+The application must be an isolated cybersecurity training and simulation environment.
+
+Only generate synthetic traffic, simulated incidents, and controlled local test data.
+
+Do not implement functionality that launches DDoS attacks, exploits public systems, scans arbitrary external targets, steals credentials, or modifies real firewall infrastructure.
+
+Incident response actions such as blocking simulated sources, isolating simulated servers, and rate limiting must modify the application's simulated network state only.
+
+Every simulated event must be clearly labeled as simulated.
+
+### 3.4 Evidence-based delivery
+
+At every milestone, maintain:
+
+- Implementation status
+- Files created or modified
+- Commands executed
+- Test results
+- Known defects
+- Remaining dependencies
+- Verification evidence
+
+Use the statuses:
+
+PASS — Verified successfully.
+
+FAIL — Tested and failed.
+
+BLOCKED — Cannot be verified because a specific external dependency or physical capability is unavailable.
+
+NOT TESTED — No verification has been performed.
+
+Never convert BLOCKED or NOT TESTED into PASS.
+
+---
+
+# 4. INITIAL REPOSITORY AUDIT
+
+Before implementation:
+
+1. Inspect the complete project directory.
+2. Identify existing applications, frameworks, dependencies, configurations, and assets.
+3. Check available development tools and installed SDKs.
+4. Check Node.js, npm, Python, Unity availability, Android SDK, Java, and relevant XR tooling where accessible.
+5. Identify existing APIs, databases, authentication, and application entry points.
+6. Check for existing code that can be reused.
+7. Identify conflicts or incompatible dependencies.
+8. Create a repository inventory.
+9. Produce an implementation plan with milestones.
+10. Begin implementation immediately after the audit.
+
+If this is an empty workspace, create a clean monorepo.
+
+Do not waste time repeatedly asking for information that can be established through repository inspection.
+
+If an external credential is required, create the required configuration and an example environment file without inventing credentials.
+
+---
+
+# 5. TARGET SYSTEM ARCHITECTURE
+
+Develop SENTINEL-XR as a unified, modular system.
+
+Use the following architecture as the target. Adjust versions based on the installed tooling and current compatibility requirements.
+
+## A. Web application
+
+- Next.js with App Router
+- React
+- TypeScript
+- Tailwind CSS v4 where compatible
+- Three.js
+- React Three Fiber
+- Drei
+- Framer Motion or an appropriate motion library
+- Recharts for analytical visualizations
+- React Query or an equivalent server-state library
+
+## B. Backend
+
+- Python
+- FastAPI
+- Pydantic
+- SQLAlchemy
+- PostgreSQL
+- Redis where appropriate
+- WebSockets for live communication
+- OpenAPI documentation
+
+## C. AI/ML
+
+- Scikit-learn
+- Random Forest
+- Isolation Forest
+- XGBoost where appropriate
+- SHAP explainability
+- PyTorch only where a genuinely useful deep-learning model is justified
+- Gemini API integration through a server-side provider adapter
+
+## D. AR application
+
+- Unity 6, subject to available tooling
+- C#
+- AR Foundation
+- ARCore XR Plugin
+- Image tracking and/or plane detection
+- AR interaction and anchoring
+
+## E. VR application
+
+- Unity 6
+- OpenXR
+- XR Interaction Toolkit
+- Unity Input System
+- Interactive 3D environment
+- Controller-based and fallback desktop interactions
+
+## F. Infrastructure
+
+- Docker
+- Docker Compose
+- Git
+- GitHub Actions-compatible CI
+- Environment-based configuration
+- Structured application logging
+
+## G. Repository organization
+
+Use a clear structure similar to:
+
+SENTINEL-XR/
+│
+├── apps/
+│   ├── web/
+│   └── api/
+│
+├── xr/
+│   └── unity/
+│       └── SentinelXR/
+│
+├── ai/
+│   ├── datasets/
+│   ├── preprocessing/
+│   ├── detection/
+│   ├── training/
+│   ├── evaluation/
+│   └── artifacts/
+│
+├── services/
+│   ├── simulation/
+│   ├── incidents/
+│   ├── intelligence/
+│   └── reporting/
+│
+├── infrastructure/
+│   ├── docker/
+│   └── database/
+│
+├── docs/
+│   ├── architecture/
+│   ├── api/
+│   ├── xr/
+│   ├── ai/
+│   ├── testing/
+│   └── deployment/
+│
+├── scripts/
+├── tests/
+├── .env.example
+├── docker-compose.yml
+├── README.md
+└── PROJECT_STATUS.md
+
+You may refine this architecture when technically justified.
+
+---
+
+# 6. COMPLETE DESIGN SYSTEM — VISUAL IDENTITY
+
+This is one of the highest-priority requirements.
+
+I want an exceptionally polished, futuristic, premium cybersecurity interface.
+
+Do not use generic admin dashboard templates.
+
+The visual quality should resemble a professional enterprise cybersecurity product combined with an advanced sci-fi command center.
+
+## 6.1 Design direction
+
+Theme name: **OBSIDIAN NEURAL**
+
+Visual characteristics:
+
+- Premium futuristic interface
+- Deep-space dark backgrounds
+- Electric blue illumination
+- Neon cyan accents
+- Deep violet gradients
+- Subtle magenta highlights
+- Carefully controlled red threat indicators
+- Advanced translucent glass panels
+- 3D spatial components
+- Sophisticated typography
+- Clean information hierarchy
+- Cinematic transitions
+- Interactive data visualizations
+
+Suggested color foundation:
+
+Background: #070B16
+
+Secondary background: #0C1222
+
+Elevated surface: #111A2D
+
+Primary blue: #477BFF
+
+Electric cyan: #00D9FF
+
+Violet: #895CFF
+
+Magenta: #D45CFF
+
+Success: #22D3A6
+
+Warning: #FFB547
+
+Critical: #FF456A
+
+Primary text: #ECF3FF
+
+Secondary text: #91A2BC
+
+Use these as initial design references, not rigid limitations.
+
+Create a centralized design-token system using CSS custom properties and Tailwind theme tokens.
+
+## 6.2 Modern CSS engineering
+
+Use modern CSS features where supported:
+
+- CSS variables and design tokens
+- OKLCH color definitions where appropriate
+- CSS Cascade Layers
+- Container queries
+- Responsive grid and flex layouts
+- Modern backdrop filters
+- View Transitions API with graceful fallbacks
+- Scroll-driven animations where appropriate
+- CSS masking and gradients
+- Fluid typography with clamp()
+- Modern :has() selectors where useful
+- Reduced-motion support
+- Hardware-accelerated animations
+
+Build reusable CSS components.
+
+Do not apply heavy blur and glow to every component. Glassmorphism should remain readable, controlled, and premium.
+
+Ensure the interface performs well on normal laptops and mobile screens.
+
+## 6.3 Typography
+
+Use a sophisticated typography pairing.
+
+Suggested:
+
+- Space Grotesk for headings
+- Inter for UI and body text
+- JetBrains Mono for system metrics, logs, and code-like information
+
+Load fonts responsibly and provide system fallbacks.
+
+## 6.4 Three-dimensional visual language
+
+The entire web dashboard must incorporate meaningful 3D elements.
+
+Examples:
+
+- Animated holographic network structures
+- Floating 3D server nodes
+- Rotating threat visualization
+- Particles flowing through network connections
+- Depth-based incident visualization
+- Perspective-driven dashboard elements
+- 3D radar surfaces
+- Animated data spheres
+- Spatial connection lines
+- Subtle parallax
+- Cinematic transitions between important views
+
+Build actual interactive 3D experiences using Three.js or React Three Fiber.
+
+Do not simply place a static 3D-looking image in the interface.
+
+The 3D elements must communicate actual application data.
+
+Examples:
+
+- Critical server nodes should visually change based on backend risk status.
+- Attack traffic should appear as animated paths in the topology.
+- An isolated server should visually change state.
+- Selecting a node should reveal its connected device and incident information.
+
+## 6.5 Animation quality
+
+Use carefully designed animations:
+
+- Page entrance transitions
+- Staggered card animations
+- Animated section transitions
+- Interactive hover states
+- Smooth modal transitions
+- Animated network edges
+- Data refresh transitions
+- Risk indicator animations
+- 3D camera movement
+- Incident replay animations
+
+Animations must serve the user experience rather than distract from it.
+
+Provide a reduced-motion setting.
+
+## 6.6 Themes
+
+Create:
+
+1. Midnight Ops — default dark theme.
+2. Light Lab — optional bright, professional theme.
+
+Theme changes must work across all web application routes.
+
+Persist the selected theme appropriately.
+
+---
+
+# 7. WEB APPLICATION — COMPLETE PRODUCT
+
+Build the web application as the central command and management interface.
+
+## 7.1 Landing / Login experience
+
+Create an impressive entry experience.
+
+The landing screen should feature:
+
+- SENTINEL-XR brand identity
+- Animated 3D network environment
+- Glowing threat particles
+- Futuristic background grid
+- Cinematic title reveal
+- Short project description
+- Sign-in action
+- Product capability overview
+
+Authentication must connect to the backend.
+
+Implement secure authentication using hashed passwords, appropriate session or token handling, and protected routes.
+
+Use role-based access control for:
+
+- Administrator
+- Security Analyst
+- Viewer
+
+Do not hardcode production accounts or passwords.
+
+Provide an explicit and documented local development bootstrap mechanism.
+
+## 7.2 Main dashboard
+
+Create a premium cybersecurity command center.
+
+Display live information:
+
+- Total simulated devices
+- Online devices
+- Active incidents
+- Critical incidents
+- Current risk index
+- Threat classification distribution
+- Simulated network traffic
+- Recent security events
+- Detection activity
+- Response activity
+
+Every dashboard metric must come from real backend data.
+
+Use clearly labeled development/demo data where relevant.
+
+## 7.3 Interactive 3D Network Topology
+
+This is a flagship feature.
+
+Create an interactive 3D network environment.
+
+Objects:
+
+- Internet gateway
+- Firewall
+- Routers
+- Servers
+- Database systems
+- Workstations
+- APIs
+- Simulated client devices
+
+Visual behavior:
+
+- Normal nodes: cyan or blue
+- Suspicious nodes: amber
+- Critical nodes: red
+- Isolated nodes: dimmed or disconnected
+- Healthy connections: blue
+- Suspicious connections: amber
+- Attack paths: animated red particles
+
+Interaction:
+
+- Select any node.
+- Rotate the 3D environment.
+- Zoom in and out.
+- Drag the network.
+- Inspect a device.
+- View connection details.
+- View associated incidents.
+- Open its risk profile.
+- Navigate to its forensic timeline.
+
+The displayed topology must be generated from backend network data, not manually duplicated in the frontend.
+
+## 7.4 Device Explorer
+
+Create a dedicated device management screen.
+
+Display:
+
+- Device ID
+- Device name
+- Device type
+- IP address from the simulated environment
+- Online status
+- Risk score
+- Resource utilization
+- Associated incidents
+- Last observed activity
+
+Provide device search, filtering, and details.
+
+Device information should synchronize with the 3D topology and XR experiences.
+
+## 7.5 Threat Intelligence Center
+
+Build a threat monitoring experience.
+
+Display:
+
+- Live event feed
+- Threat severity
+- Threat category
+- Source and destination
+- Detection timestamp
+- Confidence score
+- Associated device
+- Investigation status
+
+Include filters for:
+
+- Critical
+- High
+- Medium
+- Low
+- Attack type
+- Device
+- Time range
+- Incident status
+
+## 7.6 Incident Management
+
+Provide a complete incident lifecycle:
+
+1. Detection
+2. Investigation
+3. Risk assessment
+4. Recommended response
+5. Human approval
+6. Simulated containment
+7. Verification
+8. Resolution
+9. Forensic report
+
+Users must be able to open, investigate, assign, update, and resolve incidents according to their role.
+
+## 7.7 Simulation Laboratory
+
+Build an interactive attack simulation laboratory.
+
+Scenarios:
+
+- DDoS traffic anomaly
+- Brute-force login attempt
+- Port-scanning simulation
+- Suspicious lateral movement
+
+Controls:
+
+- Select scenario
+- Select simulated target
+- Select intensity
+- Start simulation
+- Pause simulation
+- Stop simulation
+- Reset simulation
+- Replay previous incident
+
+Generate synthetic network events and pass them through the same pipeline used by the AI detection engine.
+
+All simulation controls must be connected to backend endpoints.
+
+Show the generated events as they happen.
+
+No real attack traffic is to be transmitted.
+
+## 7.8 AI Investigation Copilot
+
+Create a premium AI assistant interface.
+
+Functions:
+
+- Explain active incidents
+- Summarize network anomalies
+- Explain model predictions
+- Explain device risk
+- Recommend containment actions
+- Summarize incident timelines
+- Generate investigation reports
+- Answer questions about the current simulated environment
+
+The AI must use backend-provided incident and device context.
+
+It must never invent incidents, devices, attack evidence, or model scores.
+
+Where possible, reference actual incident and event IDs in responses.
+
+## 7.9 XR Control Center
+
+Create a dedicated AR/VR management screen.
+
+Display:
+
+- Available XR modes
+- AR device connection status
+- VR session status
+- Latest synchronized environment
+- Current selected incident
+- XR environment health
+- Last synchronization timestamp
+
+Provide:
+
+- Launch AR instructions
+- Launch VR environment
+- Open browser-based 3D preview
+- View device marker setup
+- Review XR interaction guide
+
+Do not label an XR device connected unless the connection has genuinely been established.
+
+## 7.10 Analytics and Reports
+
+Create analytical views:
+
+- Threat distribution
+- Incidents over time
+- Detection confidence
+- Risk changes
+- Device health
+- Response effectiveness
+- Incident resolution time
+- Simulation history
+
+Provide a report-generation workflow.
+
+Reports should use stored backend records.
+
+Support downloadable PDF or CSV reports where appropriate.
+
+---
+
+# 8. BACKEND — COMPLETE FUNCTIONAL IMPLEMENTATION
+
+Build a robust FastAPI service.
+
+The frontend, AI engine, simulation engine, AR application, and VR application must communicate using documented API contracts.
+
+## 8.1 API modules
+
+Organize services into logical modules:
+
+- Authentication
+- Users
+- Devices
+- Network topology
+- Security events
+- Threat detection
+- Incidents
+- Risk assessment
+- Simulation
+- AI copilot
+- AR synchronization
+- VR synchronization
+- Analytics
+- Reporting
+- System health
+
+## 8.2 API requirements
+
+Implement validated REST endpoints and WebSocket endpoints.
+
+Expected API groups:
+
+/api/v1/auth
+
+/api/v1/users
+
+/api/v1/devices
+
+/api/v1/network/topology
+
+/api/v1/events
+
+/api/v1/threats
+
+/api/v1/incidents
+
+/api/v1/simulation
+
+/api/v1/ai
+
+/api/v1/xr
+
+/api/v1/analytics
+
+/api/v1/reports
+
+/api/v1/health
+
+Provide:
+
+- Request validation
+- Response schemas
+- Proper HTTP status codes
+- Authentication
+- Authorization
+- Pagination
+- Filtering
+- Error handling
+- Structured logging
+- API versioning
+
+Generate and maintain OpenAPI documentation.
+
+## 8.3 Database
+
+Use PostgreSQL.
+
+Implement appropriate normalized or relational structures.
+
+Core tables should include:
+
+users
+
+roles
+
+devices
+
+network_nodes
+
+network_connections
+
+security_events
+
+threat_detections
+
+incidents
+
+incident_actions
+
+simulation_sessions
+
+simulation_events
+
+ai_analysis
+
+xr_sessions
+
+audit_logs
+
+reports
+
+Add proper:
+
+- Primary keys
+- Foreign keys
+- Indexes
+- Constraints
+- Timestamps
+- Migration scripts
+
+Persist critical application state.
+
+Use migrations rather than silently creating inconsistent schemas.
+
+## 8.4 Real-time architecture
+
+Implement WebSocket communication.
+
+When a simulation begins:
+
+Synthetic event generation
+→ Backend event ingestion
+→ Feature extraction
+→ ML detection
+→ Risk evaluation
+→ Incident creation/update
+→ WebSocket broadcasting
+→ Web dashboard update
+→ XR synchronization
+
+This flow must actually work.
+
+Avoid polling everything repeatedly when WebSockets are more suitable.
+
+Implement reconnection, subscription management, and graceful connection handling.
+
+---
+
+# 9. ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING
+
+The AI subsystem must be a genuine engineering component.
+
+Do not implement a chatbot and call it an AI security engine.
+
+## 9.1 Detection pipeline
+
+Build:
+
+Synthetic network event generation
+→ Data validation
+→ Feature extraction
+→ Data normalization
+→ ML inference
+→ Classification
+→ Anomaly scoring
+→ Risk scoring
+→ Incident generation
+
+## 9.2 Initial feature set
+
+Use meaningful features such as:
+
+- Packet rate
+- Bytes per second
+- Connection count
+- Unique source count
+- Protocol distribution
+- Request frequency
+- Failed login frequency
+- Connection duration
+- Traffic deviation from baseline
+- Destination concentration
+
+Validate and document all features.
+
+## 9.3 ML models
+
+Implement a practical initial model strategy:
+
+- Isolation Forest for anomaly detection.
+- Random Forest or XGBoost for supervised classification.
+- SHAP for model explanation.
+
+Use synthetic, labeled training datasets for the initial project.
+
+Maintain a clear distinction between synthetic training data and real-world production security intelligence.
+
+## 9.4 Training pipeline
+
+Create reproducible scripts for:
+
+- Dataset creation or ingestion
+- Data cleaning
+- Feature extraction
+- Train/validation/test splitting
+- Model training
+- Hyperparameter selection
+- Model serialization
+- Model loading
+- Evaluation
+
+Avoid data leakage.
+
+Report:
+
+- Precision
+- Recall
+- F1-score
+- Confusion matrix
+- ROC-AUC where applicable
+- Class-wise performance
+
+Calculate these metrics from actual held-out evaluation data.
+
+Never fabricate accuracy percentages.
+
+## 9.5 Risk assessment
+
+Develop an explainable risk scoring system.
+
+Potential inputs:
+
+- Threat severity
+- Anomaly score
+- Detection confidence
+- Device criticality
+- Number of affected devices
+- Incident history
+
+Keep the scoring methodology documented and consistent.
+
+## 9.6 SHAP explanation
+
+Display why a model produced a particular classification.
+
+Example:
+
+ATTACK CLASSIFICATION: DDoS
+
+Contributing factors:
+
+Packet rate: Elevated
+
+Unique source count: High
+
+UDP traffic ratio: High
+
+Traffic deviation: Severe
+
+The explanation must be derived from actual model features and available model outputs.
+
+## 9.7 Gemini AI Copilot
+
+Integrate Google Gemini using a server-side provider adapter.
+
+Use Google AI Studio for obtaining and testing the API credential.
+
+Configuration:
+
+GEMINI_API_KEY=
+GEMINI_MODEL=
+AI_PROVIDER=gemini
+
+Never expose the API key in frontend JavaScript, browser network responses, public environment variables, Git history, or distributed Unity builds.
+
+The AI provider should have:
+
+- Centralized configuration
+- Request validation
+- Timeout handling
+- Retry handling
+- Error handling
+- Rate limiting
+- Token usage logging where available
+- Safe fallback behavior
+
+Create structured backend tools for the assistant.
+
+Allowed functions should include:
+
+- Retrieve current incident
+- Retrieve device information
+- Retrieve network topology
+- Retrieve event history
+- Retrieve model explanation
+- Recommend a response
+- Prepare an incident summary
+- Prepare a report
+
+Require explicit human approval before applying simulated containment actions.
+
+The AI must not execute arbitrary shell commands or unrestricted database queries.
+
+### AI response example
+
+Analyst:
+
+"Why is Server-01 under attack?"
+
+Assistant:
+
+"Server-01 has an elevated request rate relative to its simulated baseline. The detector observed a high source count and unusual traffic distribution. Incident INC-001 has been classified as a DDoS-like simulated traffic anomaly."
+
+It should then provide:
+
+- Supporting event IDs
+- Model classification
+- Confidence score
+- Contributing features
+- A recommended response
+
+Only include information supported by the backend.
+
+If Gemini is unavailable, display an honest provider-unavailable status and continue to support rule-based investigation and locally available functionality.
+
+---
+
+# 10. CYBERSECURITY SIMULATION ENGINE
+
+Build a controlled, reproducible simulation system.
+
+## Scenarios
+
+### Scenario A — DDoS-like traffic anomaly
+
+Generate synthetic bursts of network requests and unusual source distributions.
+
+### Scenario B — Brute-force simulation
+
+Generate repeated failed authentication events against a simulated login service.
+
+### Scenario C — Port scan simulation
+
+Generate synthetic connection-attempt records involving multiple simulated ports.
+
+### Scenario D — Lateral movement simulation
+
+Generate a sequence of suspicious connections between simulated internal network nodes.
+
+## Simulation architecture
+
+Scenario selection
+→ Scenario configuration
+→ Synthetic event generator
+→ Event processing
+→ ML detector
+→ Incident manager
+→ WebSocket updates
+→ Visualization
+
+Each simulation should be reproducible using a session seed or recorded event sequence where practical.
+
+Support:
+
+- Start
+- Pause
+- Resume
+- Stop
+- Reset
+- Playback
+- Event history
+- Simulation session details
+
+Keep simulation state separate from user accounts and permanent application configuration.
+
+---
+
+# 11. UNITY AR APPLICATION
+
+Build a real Unity AR application.
+
+Primary target: Android devices that support ARCore.
+
+Use AR Foundation with the appropriate provider.
+
+## 11.1 AR home screen
+
+Build a professional AR application interface with:
+
+- SENTINEL-XR branding
+- Scan environment action
+- Connected backend status
+- Device marker setup
+- Available incidents
+- AR session state
+
+## 11.2 Environment tracking
+
+Support:
+
+- Plane detection
+- Image tracking
+- Anchor placement
+- Placement visualization
+- Camera permission handling
+- Session initialization and recovery
+
+Where appropriate, use printed QR/image markers associated with simulated device IDs.
+
+Do not claim that the camera can identify arbitrary physical servers without an implemented recognition mechanism.
+
+## 11.3 AR network objects
+
+Display spatial representations of devices:
+
+- Server
+- Firewall
+- Router
+- Database
+- Workstation
+
+Each object should have interactive visual states.
+
+## 11.4 AR device information
+
+When a user selects a device, display a world-space information panel.
+
+Example:
+
+SERVER-01
+
+STATUS: ONLINE
+
+RISK: 87/100
+
+THREAT: CRITICAL
+
+RESOURCE STATUS: HIGH
+
+ACTIVE INCIDENTS: 1
+
+Actions:
+
+- Inspect
+- Investigate
+- View connections
+- Open incident
+- Enter VR investigation
+
+All available information should come from the backend.
+
+## 11.5 AR threat visualization
+
+Implement:
+
+- Floating threat indicators
+- Spatial attack paths
+- Threat color coding
+- Device risk indicators
+- Connection visualization
+- Incident timeline panel
+
+Animate the paths in a way that communicates actual simulation events.
+
+## 11.6 AR interactions
+
+Implement:
+
+- Tap to select
+- Pinch to scale where appropriate
+- Rotate objects where appropriate
+- Information panel interactions
+- Device selection
+- Incident inspection
+
+## 11.7 AR backend synchronization
+
+The AR client must:
+
+- Authenticate using the supported client flow.
+- Retrieve device data.
+- Retrieve topology.
+- Subscribe to relevant updates.
+- Send session status.
+- Retrieve current incidents.
+- Reflect device state changes.
+
+Implement appropriate token and session security.
+
+Do not embed server credentials in the mobile application.
+
+---
+
+# 12. UNITY VR APPLICATION — IMMERSIVE SECURITY OPERATIONS CENTER
+
+Build a fully immersive virtual Security Operations Center.
+
+This must be a genuine interactive VR environment, not merely a 360-degree background or a collection of static panels.
+
+## 12.1 VR entry experience
+
+Create:
+
+- Immersive entry environment
+- SENTINEL-XR branding
+- Loading transition
+- User presence
+- Main SOC environment
+- Smooth navigation where supported
+
+## 12.2 3D environment
+
+Design a high-quality futuristic cybersecurity operations room.
+
+Include:
+
+- Central holographic 3D network
+- Floating threat panels
+- Incident monitoring displays
+- AI assistant station
+- Device inspection area
+- Global threat visualization area
+- Operational status panels
+- 3D data structures
+- Cinematic environmental lighting
+
+Use efficient 3D assets and shaders.
+
+Prefer procedural or original models rather than unauthorized copyrighted assets.
+
+## 12.3 VR interactions
+
+Use XR Interaction Toolkit and OpenXR.
+
+The user must be able to:
+
+- Move around the SOC
+- Grab and inspect network objects
+- Select individual server nodes
+- Rotate the network model
+- Zoom the network visualization
+- Select threat streams
+- Inspect incidents
+- Open virtual investigation panels
+- Interact with the AI assistant
+- Trigger simulation playback
+- Review response recommendations
+- Approve simulated response actions
+
+Controller input must work correctly with the configured XR interaction setup.
+
+Provide a desktop keyboard/mouse demonstration mode where practical so the environment can be demonstrated without a physical VR headset.
+
+Desktop mode must not be incorrectly described as headset verification.
+
+## 12.4 3D incident reconstruction
+
+This is a flagship VR feature.
+
+When an incident is selected, provide:
+
+- Incident identification
+- Timeline
+- Source and destination nodes
+- Animated event sequence
+- Traffic visualization
+- Threat progression
+- Affected devices
+- Detection moment
+- Response moment
+- Resolution state
+
+Create a time-controlled replay.
+
+The user should be able to pause, resume, restart, and inspect the incident sequence.
+
+## 12.5 VR AI assistant
+
+Create an interactive AI investigation panel.
+
+Users should be able to ask:
+
+- What happened?
+- Which devices were affected?
+- Why was the event classified as suspicious?
+- What is the current risk?
+- What response is recommended?
+- What happened after containment?
+
+The assistant must use the same backend and Gemini integration as the web application.
+
+---
+
+# 13. MOST IMPORTANT: UNIFIED AR + VR + WEB SYNCHRONIZATION
+
+The AR, VR, web, and backend environments must operate on the same application data.
+
+Do not create separate hardcoded versions of the environment.
+
+### Required integration flow
+
+WEB DASHBOARD
+        |
+        |
+        v
+FASTAPI BACKEND
+        |
+        +-------------------+
+        |                   |
+        v                   v
+    UNITY AR            UNITY VR
+        |                   |
+        +---------+---------+
+                  |
+                  v
+           SHARED DATABASE
+                  |
+                  v
+          SIMULATION ENGINE
+                  |
+                  v
+             AI / ML
+                  |
+                  v
+          INCIDENT MANAGER
+                  |
+                  v
+        REAL-TIME EVENT BUS
+                  |
+         +--------+--------+
+         |        |        |
+         v        v        v
+        WEB      AR       VR
+
+Example integration acceptance scenario:
+
+1. Launch a simulated DDoS-like traffic anomaly from the web dashboard.
+2. Backend generates synthetic events.
+3. ML engine analyzes the incoming features.
+4. An incident is created.
+5. Web dashboard receives the incident.
+6. AR application displays the affected server and threat state.
+7. VR application displays the same affected server and incident.
+8. Analyst opens the incident in VR.
+9. AI Copilot explains the incident using its actual backend data.
+10. Analyst approves a simulated containment action.
+11. Backend updates the simulated network state.
+12. Web, AR, and VR all reflect the changed state.
+13. Incident history records the action.
+14. Analyst generates a forensic report.
+
+This entire workflow must be implemented and verified to the extent that the available environment permits.
+
+---
+
+# 14. PROFESSIONAL USER EXPERIENCE
+
+The product must feel like one coherent commercial software platform.
+
+Ensure:
+
+- Consistent brand identity
+- Reusable components
+- Consistent spacing
+- Consistent colors
+- Consistent icons
+- Clear information hierarchy
+- Proper loading animations
+- Useful empty states
+- Professional error handling
+- Responsive layouts
+- Accessible controls
+- Keyboard navigation where applicable
+- Clear navigation structure
+
+Build a shared component library for the web application.
+
+Suggested reusable components:
+
+- GlassCard
+- MetricCard
+- RiskIndicator
+- ThreatBadge
+- DeviceCard
+- IncidentCard
+- NetworkNode
+- NetworkConnection
+- AIResponsePanel
+- SimulationControl
+- Timeline
+- StatusIndicator
+- Modal
+- CommandPalette
+- NotificationCenter
+- DataTable
+- LoadingSkeleton
+
+Do not duplicate UI components unnecessarily.
+
+---
+
+# 15. SECURITY ENGINEERING
+
+Treat security as a core engineering requirement.
+
+Implement and verify where applicable:
+
+- Secure password hashing
+- Role-based authorization
+- Input validation
+- Output encoding
+- CSRF protection where applicable
+- Appropriate CORS restrictions
+- Rate limiting
+- Secure session management
+- HTTP security headers
+- Secrets management
+- SQL injection prevention
+- Dependency vulnerability checks
+- Audit logging
+- Error-message sanitization
+- Upload restrictions if uploads exist
+- WebSocket authentication
+- Proper token expiration and refresh behavior
+
+Do not expose sensitive application data through public endpoints.
+
+Do not log passwords, API keys, or authentication tokens.
+
+Do not configure unrestricted CORS for convenience.
+
+Create a security review report documenting both passed controls and outstanding risks.
+
+---
+
+# 16. PERFORMANCE AND OPTIMIZATION
+
+Optimize for practical hardware.
+
+Web:
+
+- Lazy-load 3D scenes.
+- Split bundles.
+- Avoid unnecessary re-renders.
+- Optimize textures and models.
+- Use efficient particle systems.
+- Avoid excessive WebGL resource allocation.
+
+Backend:
+
+- Use asynchronous processing appropriately.
+- Optimize database queries.
+- Reuse connections.
+- Add timeouts and bounded queues.
+- Avoid unbounded event accumulation.
+
+AR:
+
+- Optimize materials.
+- Minimize unnecessary real-time allocations.
+- Handle tracking interruptions.
+- Respect camera and device performance constraints.
+
+VR:
+
+- Maintain stable frame pacing.
+- Avoid excessive shader complexity.
+- Use efficient lighting.
+- Keep interaction latency low.
+- Optimize environment geometry.
+
+Test on available development hardware and document the actual measurement conditions.
+
+Never invent FPS, latency, or performance claims.
+
+---
+
+# 17. COMPLETE TESTING AND QUALITY ASSURANCE
+
+Testing is mandatory.
+
+Do not consider the project complete until the relevant tests have been executed.
+
+## 17.1 Web tests
+
+- Application build
+- TypeScript checks
+- Linting
+- Component tests
+- UI interaction tests
+- Route tests
+- Authentication tests
+- Dashboard data tests
+- WebSocket connection tests
+- 3D topology interaction tests
+- Responsive layout tests
+
+Use Playwright for end-to-end testing where practical.
+
+## 17.2 Backend tests
+
+Use pytest.
+
+Test:
+
+- Health endpoint
+- Authentication
+- Authorization
+- Database operations
+- Device APIs
+- Incident APIs
+- Simulation APIs
+- AI APIs
+- WebSocket behavior
+- Invalid input handling
+- Rate limiting
+- Error handling
+
+## 17.3 ML tests
+
+Verify:
+
+- Dataset integrity
+- Feature extraction
+- Model training
+- Model serialization
+- Model loading
+- Prediction behavior
+- Evaluation metrics
+- SHAP explanations
+- Invalid input handling
+
+## 17.4 XR tests
+
+Test available Unity edit-mode and play-mode workflows.
+
+Verify:
+
+- Scene loading
+- Object interaction
+- Input bindings
+- Backend integration
+- Device selection
+- State updates
+- Session recovery
+- Desktop fallback
+
+When physical devices are available, perform real hardware checks for:
+
+- Android ARCore tracking
+- Camera permission handling
+- Marker tracking
+- OpenXR session initialization
+- Controller interactions
+- VR performance
+
+If hardware is unavailable, report those tests as BLOCKED or NOT TESTED.
+
+Do not falsely claim that AR or VR headset testing succeeded.
+
+## 17.5 End-to-end acceptance test
+
+Create an automated or reproducible end-to-end integration test:
+
+Start application
+→ Start simulation
+→ Receive generated events
+→ Detect suspicious activity
+→ Create incident
+→ Broadcast incident
+→ Retrieve incident in web
+→ Retrieve incident through XR API
+→ Submit investigation request
+→ Generate AI analysis where provider is available
+→ Execute approved simulated response
+→ Verify updated device state
+→ Verify event history
+→ Generate report
+
+The test must use real application services and persisted application state, not mocked responses across the entire pipeline.
+
+Where physical XR clients are unavailable, test the shared API contracts and session synchronization separately, with the hardware-specific limitation documented.
+
+---
+
+# 18. DEVOPS AND DEPLOYMENT
+
+Prepare a reproducible local development environment.
+
+Use Docker Compose where appropriate.
+
+Provide services for:
+
+- Web application
+- Backend
+- PostgreSQL
+- Redis where required
+
+Create:
+
+- Dockerfiles
+- Docker Compose configuration
+- Environment templates
+- Database migrations
+- Startup scripts
+- Health checks
+- CI configuration
+- Production build instructions
+
+Ensure the web application and backend can run locally using documented commands.
+
+Do not place production credentials in Dockerfiles or committed configuration files.
+
+Create GitHub Actions workflows for:
+
+- Backend tests
+- Frontend lint and type checking
+- Frontend build
+- ML tests
+- Dependency checks
+
+Only add build stages that the configured environment can genuinely support.
+
+Document how the Unity application connects to the development and deployed backend.
+
+Use HTTPS and appropriate authentication in any deployed configuration.
+
+---
+
+# 19. REQUIRED DOCUMENTATION AND DELIVERABLES
+
+Generate complete professional documentation.
+
+## Required files
+
+1. README.md
+2. PROJECT_STATUS.md
+3. SYSTEM_ARCHITECTURE.md
+4. DATABASE_SCHEMA.md
+5. API_DOCUMENTATION.md
+6. AI_ML_DOCUMENTATION.md
+7. XR_IMPLEMENTATION_GUIDE.md
+8. AR_SETUP_GUIDE.md
+9. VR_SETUP_GUIDE.md
+10. SECURITY_AUDIT.md
+11. TESTING_REPORT.md
+12. DEPLOYMENT_GUIDE.md
+13. USER_MANUAL.md
+14. KNOWN_LIMITATIONS.md
+15. CONTRIBUTING.md
+
+## README must include
+
+- Project overview
+- Screenshots when genuinely generated
+- Architecture
+- Technology stack
+- Project structure
+- Installation
+- Configuration
+- Database setup
+- Running the frontend
+- Running the backend
+- Running the AI engine
+- Running simulations
+- Unity project setup
+- AR instructions
+- VR instructions
+- Testing instructions
+- Deployment
+- Troubleshooting
+
+## Final technical report
+
+Produce a final implementation report covering:
+
+- What was built
+- How components communicate
+- Main technologies
+- AI methodology
+- Dataset information
+- Actual ML evaluation results
+- XR architecture
+- Security measures
+- Test results
+- Known limitations
+- Hardware dependencies
+- Deployment status
+- Remaining production risks
+
+---
+
+# 20. IMPLEMENTATION MILESTONES
+
+Follow this execution order.
+
+### MILESTONE 0 — REPOSITORY AUDIT
+
+Inspect environment, code, dependencies, and compatibility.
+
+Produce repository inventory and implementation plan.
+
+Then continue.
+
+### MILESTONE 1 — ARCHITECTURE AND FOUNDATION
+
+Set up repository structure, shared contracts, environment configuration, backend foundation, database, and initial frontend.
+
+Verify local startup.
+
+### MILESTONE 2 — DESIGN SYSTEM AND WEB APPLICATION
+
+Implement the complete visual theme, responsive navigation, dashboard, 3D topology, device management, incident screens, simulation laboratory, AI Copilot interface, analytics, and XR control center.
+
+Connect everything to actual API services.
+
+### MILESTONE 3 — BACKEND AND REAL-TIME SYSTEM
+
+Complete FastAPI services, database migrations, authentication, authorization, incident management, event processing, WebSockets, and API documentation.
+
+### MILESTONE 4 — AI AND ML ENGINE
+
+Create datasets, feature pipelines, ML models, evaluation, explainability, risk scoring, and Gemini integration.
+
+Connect detection results to actual backend incidents.
+
+### MILESTONE 5 — SIMULATION ENGINE
+
+Implement four controlled scenarios.
+
+Connect scenario generation, event ingestion, AI inference, incident generation, and event broadcasting.
+
+### MILESTONE 6 — UNITY AR
+
+Build the Unity AR project, marker workflow, spatial device visualization, information panels, and shared backend integration.
+
+### MILESTONE 7 — UNITY VR
+
+Build the immersive SOC, 3D topology, incident visualization, interaction system, investigation interface, and shared backend integration.
+
+### MILESTONE 8 — CROSS-PLATFORM INTEGRATION
+
+Verify shared data synchronization between web, AR, VR, and backend.
+
+Fix all integration issues that can be resolved in the available environment.
+
+### MILESTONE 9 — QUALITY ASSURANCE
+
+Execute tests, security checks, performance checks, linting, builds, and end-to-end tests.
+
+Fix defects and repeat affected tests.
+
+### MILESTONE 10 — RELEASE DOCUMENTATION
+
+Complete the technical documentation, deployment instructions, known limitations, test evidence, and final implementation report.
+
+Do not skip milestones merely because one platform requires unavailable physical hardware.
+
+Continue developing the other components.
+
+---
+
+# 21. DEFINITION OF DONE
+
+SENTINEL-XR can only be marked fully implemented when the applicable conditions below are verified.
+
+## Product
+
+- Functional web application
+- Functional backend
+- Persistent database
+- Real-time communication
+- Working simulation engine
+- Actual ML inference
+- AI Copilot integration
+- Interactive web-based 3D visualization
+- Unity AR application
+- Unity VR application
+- Shared application data
+- Secure authentication
+- Role-based access
+- Reports and analytics
+- Complete documentation
+
+## Design
+
+- Consistent OBSIDIAN NEURAL design system
+- Responsive layouts
+- High-quality 3D visualizations
+- Smooth interactions
+- Working light/dark theme selection
+- Accessible controls
+- No broken visual states
+
+## Engineering
+
+- Successful builds for available targets
+- Tests executed
+- Integration verified
+- No unresolved critical defects
+- No exposed secrets
+- No fabricated verification results
+- Deployment configuration documented
+
+## Cross-platform demonstration
+
+A simulation started in the web dashboard must generate real backend events, be analyzed by the AI/ML pipeline, create an incident, and provide the same incident information to the AR and VR clients.
+
+The final report must explicitly distinguish:
+
+- Fully implemented and verified
+- Implemented but not hardware-verified
+- Blocked by external dependencies
+- Not implemented
+- Known limitations
+
+A successful frontend build alone is not sufficient.
+
+---
+
+# 22. EXECUTION INSTRUCTIONS — START NOW
+
+You have the complete project vision, architecture, feature specification, design identity, implementation order, and acceptance requirements.
+
+Now execute the project.
+
+Your immediate instructions:
+
+1. Inspect the existing workspace.
+2. Produce the repository inventory.
+3. Check the installed SDKs and available tooling.
+4. Identify implementation blockers.
+5. Establish the monorepo and architecture.
+6. Start building the actual application.
+7. Implement the frontend, backend, database, AI engine, simulation engine, AR, and VR components.
+8. Connect every implemented module.
+9. Execute tests.
+10. Fix errors rather than merely reporting them.
+11. Update PROJECT_STATUS.md continuously.
+12. Keep a record of verified features.
+13. Produce the final technical and quality-assurance report.
+
+### When you encounter an error
+
+Do not abandon the task.
+
+Investigate the root cause.
+
+Check dependency compatibility.
+
+Inspect logs.
+
+Apply the appropriate correction.
+
+Rerun the failed command.
+
+Verify the correction.
+
+Document unresolved environmental blockers accurately.
+
+### When you encounter an unavailable external service
+
+Implement a provider abstraction and a clearly labeled local fallback.
+
+Never simulate a successful external integration.
+
+### When you encounter an unavailable XR device
+
+Continue building the Unity scenes and interactions.
+
+Use an appropriate desktop simulation or editor testing path where available.
+
+Document the exact hardware-only verification that remains.
+
+### When making design decisions
+
+Prioritize product quality, engineering quality, maintainability, visual consistency, and actual functionality.
+
+Do not sacrifice working functionality for unnecessary visual effects.
+
+### Final command
+
+**BUILD SENTINEL-XR END TO END.**
+
+Not a mockup.
+
+Not a static demo.
+
+Not disconnected modules.
+
+Build a unified, immersive, AI-driven cybersecurity platform with an extraordinary user experience, real application logic, synchronized AR and VR experiences, and verifiable engineering quality.
+
+The standard is a serious, mentor-ready, research-worthy major engineering project with professional product-level execution.
+
+Begin with the repository audit and continue through implementation and verification.

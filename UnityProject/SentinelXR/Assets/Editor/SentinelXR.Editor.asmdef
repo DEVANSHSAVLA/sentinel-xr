@@ -1,0 +1,22 @@
+{
+    "name": "SentinelXR.Editor",
+    "rootNamespace": "SentinelXR.Editor",
+    "references": [
+        "SentinelXR",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.XR.ARFoundation",
+        "Unity.XR.OpenXR",
+        "Unity.XR.Interaction.Toolkit"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

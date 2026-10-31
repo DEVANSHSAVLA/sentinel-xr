@@ -1,0 +1,30 @@
+{
+  "openXR": {
+    "version": "1.12.1",
+    "renderMode": "MultiPassOrSinglePassInstanced",
+    "depthSubmission": true,
+    "enabledFeatures": [
+      "MetaQuestFeature",
+      "OculusTouchControllerProfile",
+      "HTCViveControllerProfile",
+      "MicrosoftMotionControllerProfile",
+      "HandTrackingFeature",
+      "EyeGazeInteractionFeature"
+    ],
+    "xrInteractionToolkit": {
+      "version": "3.0.4",
+      "interactorTypes": [
+        "XRRayInteractor",
+        "XRDirectInteractor",
+        "TeleportationProvider"
+      ],
+      "inputActionsAsset": "SentinelXR_InputActions.inputactions"
+    },
+    "socEnvironment": {
+      "defaultScene": "Assets/Scenes/VRSOCScene.unity",
+      "tacticalHologramOrigin": [0.0, 1.2, 1.5],
+      "hapticFeedbackIntensity": 0.65,
+      "enableReplayAudio": true
+    }
+  }
+}

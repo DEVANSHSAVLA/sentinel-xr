@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SENTINEL-XR</title>
+    <meta name="description" content="AI-Driven Immersive Extended Reality Framework for Cyber Threat Visualization, Investigation and Incident Response." />
+    <meta property="og:title" content="SENTINEL-XR" />
+    <meta property="og:description" content="AI-Driven Immersive Extended Reality Framework for Cyber Threat Visualization, Investigation and Incident Response." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+      // Intercept and suppress external browser extension errors (e.g. MetaMask inpage.js)
+      window.addEventListener('error', function(event) {
+        var file = event.filename || '';
+        var msg = event.message || '';
+        if (
+          file.indexOf('chrome-extension://') !== -1 ||
+          /metamask/i.test(msg) ||
+          /inpage\.js/i.test(file)
+        ) {
+          event.stopImmediatePropagation();
+          event.preventDefault();
+          return true;
+        }
+      }, true);
+
+      window.addEventListener('unhandledrejection', function(event) {
+        var reason = event.reason ? (event.reason.message || String(event.reason)) : '';
+        var stack = (event.reason && event.reason.stack) ? event.reason.stack : '';
+        if (
+          /metamask/i.test(reason) ||
+          stack.indexOf('chrome-extension://') !== -1 ||
+          stack.indexOf('inpage.js') !== -1
+        ) {
+          event.stopImmediatePropagation();
+          event.preventDefault();
+        }
+      }, true);
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

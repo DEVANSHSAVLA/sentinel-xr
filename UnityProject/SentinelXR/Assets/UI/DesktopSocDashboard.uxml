@@ -1,0 +1,53 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/ObsidianNeural.uss" />
+    <ui:VisualElement class="root-container">
+        <!-- Top Navigation Bar -->
+        <ui:VisualElement class="top-bar">
+            <ui:VisualElement style="flex-direction: row; align-items: center;">
+                <ui:Label text="SENTINEL-XR" class="brand-title" />
+            </ui:VisualElement>
+            
+            <ui:VisualElement class="nav-row">
+                <ui:Button name="btn-dashboard" text="Dashboard" class="nav-button nav-button-active" />
+                <ui:Button name="btn-topology" text="3D Topology" class="nav-button" />
+                <ui:Button name="btn-devices" text="Devices" class="nav-button" />
+                <ui:Button name="btn-threats" text="Threat Intel" class="nav-button" />
+                <ui:Button name="btn-incidents" text="Incidents" class="nav-button" />
+                <ui:Button name="btn-simlab" text="Simulation Lab" class="nav-button" />
+                <ui:Button name="btn-copilot" text="AI Copilot" class="nav-button" />
+                <ui:Button name="btn-xr" text="XR Hub" class="nav-button" />
+            </ui:VisualElement>
+
+            <ui:VisualElement style="flex-direction: row; align-items: center;">
+                <ui:Button name="btn-quick-sim" text="Launch Simulation" class="primary-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Main Workspace -->
+        <ui:VisualElement style="flex: 1; flex-direction: row; padding: 12px;">
+            <!-- Center 3D Viewport Area -->
+            <ui:VisualElement style="flex: 2; margin-right: 12px;">
+                <ui:VisualElement class="glass-card" style="flex: 1; justify-content: space-between;">
+                    <ui:Label text="INTERACTIVE 3D TOPOLOGY VIEWPORT" class="kpi-title" />
+                    <ui:VisualElement name="viewport-placeholder" style="flex: 1;" />
+                    <ui:Label text="9 Synchronized Nodes · Orbit &amp; Grab Controls Active" style="font-size: 11px; color: var(--text-secondary);" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <!-- Right Telemetry & Incident Sidebar -->
+            <ui:VisualElement style="flex: 1; flex-direction: column;">
+                <ui:VisualElement class="glass-card">
+                    <ui:Label text="NETWORK RISK POSTURE" class="kpi-title" />
+                    <ui:Label name="lbl-risk-score" text="26 / 100" class="kpi-value" />
+                </ui:VisualElement>
+
+                <ui:VisualElement class="glass-card" style="flex: 1;">
+                    <ui:Label text="ACTIVE INCIDENT INVESTIGATION" class="kpi-title" />
+                    <ui:Label name="lbl-incident-title" text="DDoS Volumetric Inundation" style="font-size: 14px; -unity-font-style: bold; margin-top: 6px; color: #FF456A;" />
+                    <ui:Label name="lbl-incident-desc" text="SYN flood volumetric surge targeting server-01 (Port 80)." style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;" />
+                    <ui:Button name="btn-contain" text="Execute Containment" class="danger-button" style="margin-top: 12px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

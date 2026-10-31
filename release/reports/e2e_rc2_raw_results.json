@@ -1,0 +1,400 @@
+{
+  "releaseVersion": "2.0.0-rc2",
+  "testExecutionDate": "2026-10-30T07:14:13.664Z",
+  "totalSteps": 17,
+  "passedSteps": 17,
+  "failedSteps": 0,
+  "activeIncidentTested": "INC-6730",
+  "forensicSha256": "a5422935ca9759c694c673c86ed5d384909db8d0fe07a9f1f3972c9536cb5c0c",
+  "results": [
+    {
+      "step": 1,
+      "name": "Backend Core Service Operational",
+      "status": "PASS",
+      "details": "Backend online. Platform: SENTINEL-XR Full-Stack Service, AI Provider: gemini-active",
+      "timestamp": "2026-10-30T07:13:54.696Z",
+      "evidence": {
+        "status": "healthy",
+        "version": "1.0.0",
+        "platform": "SENTINEL-XR Full-Stack Service",
+        "database": "active",
+        "aiProvider": "gemini-active",
+        "activeConnections": 0,
+        "timestamp": "2026-10-30T07:13:54.685Z"
+      }
+    },
+    {
+      "step": 2,
+      "name": "Windows Desktop Configuration Stamped (RC2)",
+      "status": "PASS",
+      "details": "Valid configuration version 2.0.0-rc2, target: http://127.0.0.1:3000/api/v1",
+      "timestamp": "2026-10-30T07:13:54.696Z",
+      "evidence": {
+        "title": "SENTINEL-XR 2.0 SOC Console",
+        "version": "2.0.0-rc2",
+        "environment": "Production-Desktop",
+        "targetFrameRate": 60,
+        "vsync": true
+      }
+    },
+    {
+      "step": 3,
+      "name": "Topology Baseline & Node Reset",
+      "status": "PASS",
+      "details": "9 network nodes active and in nominal healthy state across DMZ, Enterprise, and Core Data zones.",
+      "timestamp": "2026-10-30T07:13:54.710Z",
+      "evidence": {
+        "totalNodes": 9,
+        "connections": 9
+      }
+    },
+    {
+      "step": 4,
+      "name": "WebSocket Event Bus Connected",
+      "status": "PASS",
+      "details": "Established persistent duplex stream on ws://localhost:3000/ws",
+      "timestamp": "2026-10-30T07:13:54.724Z"
+    },
+    {
+      "step": 5,
+      "name": "Synthetic Attack Simulation Activated",
+      "status": "PASS",
+      "details": "DDoS attack simulation injected on server-01 at high intensity.",
+      "timestamp": "2026-10-30T07:13:54.733Z",
+      "evidence": {
+        "isActive": true,
+        "isPaused": false,
+        "currentScenario": "ddos",
+        "targetDeviceId": "server-01",
+        "intensity": "high",
+        "elapsedSeconds": 0,
+        "totalEventsGenerated": 0,
+        "activeIncidentsGenerated": 0
+      }
+    },
+    {
+      "step": 6,
+      "name": "High-Volume Telemetry Streaming",
+      "status": "PASS",
+      "details": "Telemetry streaming detected. Top event packet rate: 14493 pkts/s, Protocol: TCP",
+      "timestamp": "2026-10-30T07:13:58.239Z",
+      "evidence": {
+        "id": "EVT-436729-1006",
+        "timestamp": "2026-10-30T07:13:56.729Z",
+        "sourceIp": "198.51.50.43",
+        "destIp": "10.0.1.10",
+        "destPort": 80,
+        "protocol": "TCP",
+        "packetRate": 14493,
+        "bytesPerSec": 14840832,
+        "uniqueSources": 400,
+        "failedAuthAttempts": 0,
+        "anomalyScore": 1,
+        "predictedAttackType": "DDoS",
+        "severity": "critical",
+        "targetDeviceId": "server-01",
+        "rawPayloadSummary": "SYN flood volumetric surge targeting server-01 (10.0.1.10:80)",
+        "shapFactors": [
+          {
+            "feature": "Packet Rate",
+            "value": "14,493 pkts/s",
+            "impact": "Severe",
+            "contributionScore": 0.46
+          },
+          {
+            "feature": "Unique Source IPs",
+            "value": "400 addresses",
+            "impact": "High",
+            "contributionScore": 0.32
+          },
+          {
+            "feature": "Traffic Volume",
+            "value": "14.15 MB/s",
+            "impact": "Elevated",
+            "contributionScore": 0.18
+          }
+        ]
+      }
+    },
+    {
+      "step": 7,
+      "name": "Isolation Forest Anomaly Inference",
+      "status": "PASS",
+      "details": "Anomaly score calculated: 1.000 (threshold > 0.80). Confirmed volumetric anomaly.",
+      "timestamp": "2026-10-30T07:13:58.239Z",
+      "evidence": {
+        "anomalyScore": 1,
+        "severity": "critical"
+      }
+    },
+    {
+      "step": 8,
+      "name": "SHAP Feature Attribution Generation",
+      "status": "PASS",
+      "details": "Generated 3 SHAP factors. Dominant feature: Packet Rate (Severe)",
+      "timestamp": "2026-10-30T07:13:58.239Z",
+      "evidence": [
+        {
+          "feature": "Packet Rate",
+          "value": "14,493 pkts/s",
+          "impact": "Severe",
+          "contributionScore": 0.46
+        },
+        {
+          "feature": "Unique Source IPs",
+          "value": "400 addresses",
+          "impact": "High",
+          "contributionScore": 0.32
+        },
+        {
+          "feature": "Traffic Volume",
+          "value": "14.15 MB/s",
+          "impact": "Elevated",
+          "contributionScore": 0.18
+        }
+      ]
+    },
+    {
+      "step": 9,
+      "name": "Dynamic Incident Ticket Creation",
+      "status": "PASS",
+      "details": "Dynamic incident generated: INC-6730 [CRITICAL]. Title: DDoS Volumetric Inundation Attack",
+      "timestamp": "2026-10-30T07:13:58.244Z",
+      "evidence": {
+        "id": "INC-6730",
+        "title": "DDoS Volumetric Inundation Attack",
+        "status": "detected"
+      }
+    },
+    {
+      "step": 10,
+      "name": "3D Node State Escalation",
+      "status": "PASS",
+      "details": "Target node server-01 status transitioned to 'critical', risk score elevated to 27/100.",
+      "timestamp": "2026-10-30T07:13:58.246Z",
+      "evidence": {
+        "id": "server-01",
+        "name": "DMZ Web App Cluster",
+        "type": "server",
+        "ip": "10.0.1.10",
+        "status": "critical",
+        "riskScore": 27,
+        "zone": "dmz",
+        "position": [
+          3,
+          2,
+          -2
+        ],
+        "services": [
+          "HTTPS (443)",
+          "Nginx 1.24",
+          "React Frontend SSR"
+        ],
+        "cpuUsage": 38,
+        "memoryUsage": 62,
+        "trafficRate": 14493
+      }
+    },
+    {
+      "step": 11,
+      "name": "WebSocket Real-Time Broadcast Reception",
+      "status": "PASS",
+      "details": "Received 4 WebSocket telemetry packets during simulation.",
+      "timestamp": "2026-10-30T07:13:58.247Z",
+      "evidence": {
+        "totalMessages": 4,
+        "messageTypes": [
+          "SIMULATION_UPDATE",
+          "INCIDENT_CREATED",
+          "SECURITY_EVENT",
+          "TOPOLOGY_UPDATE"
+        ]
+      }
+    },
+    {
+      "step": 12,
+      "name": "Gemini 2.5 Flash Copilot Investigation",
+      "status": "PASS",
+      "details": "AI response received (1792 chars). Model: gemini-2.5-flash, Source: gemini",
+      "timestamp": "2026-10-30T07:14:13.644Z",
+      "evidence": {
+        "model": "gemini-2.5-flash",
+        "source": "gemini",
+        "excerpt": "**Incident Analysis for INC-6730 targeting server-01 (DMZ Web App Cluster)**\n\n**1. Attack Vector:**\nThe attack vector for **INC-6730** is a **SYN flood Distributed Denial of Service (DDoS)**. This is confirmed by the incident description (\"SYN flood ..."
+      }
+    },
+    {
+      "step": 13,
+      "name": "Human-in-the-Loop Containment Approval",
+      "status": "PASS",
+      "details": "Incident INC-6730 containment approved. Lifecycle moved to 'contained'.",
+      "timestamp": "2026-10-30T07:14:13.651Z",
+      "evidence": {
+        "id": "INC-6730",
+        "title": "DDoS Volumetric Inundation Attack",
+        "severity": "critical",
+        "status": "contained",
+        "scenario": "DDoS",
+        "targetDeviceId": "server-01",
+        "affectedNodes": [
+          "server-01"
+        ],
+        "sourceIp": "198.51.50.43",
+        "timestamp": "2026-10-30T07:13:56.730Z",
+        "description": "ML detection engine flagged anomalous traffic profile: SYN flood volumetric surge targeting server-01 (10.0.1.10:80). Anomaly score 1.00, confidence 99%.",
+        "confidenceScore": 92,
+        "shapFactors": [
+          {
+            "feature": "Packet Rate Surge",
+            "value": "14493 pkts/s",
+            "impact": "Severe",
+            "contributionScore": 0.48
+          },
+          {
+            "feature": "Target Vulnerability Surface",
+            "value": "TCP:80",
+            "impact": "High",
+            "contributionScore": 0.32
+          },
+          {
+            "feature": "Source IP Reputation",
+            "value": "198.51.50.43",
+            "impact": "Moderate",
+            "contributionScore": 0.2
+          }
+        ],
+        "recommendedAction": "Deploy rate-limiting scrub rule and temporarily isolate external ingress to server-01",
+        "containmentApproved": true,
+        "timeline": [
+          {
+            "time": "2026-10-30T07:13:56.730Z",
+            "stage": "detected",
+            "description": "Automated detection triggered by anomalous traffic pattern (DDoS)",
+            "actor": "AI Detector"
+          },
+          {
+            "time": "2026-10-30T07:14:13.648Z",
+            "stage": "contained",
+            "description": "Approved containment: Target device server-01 isolated from DMZ traffic.",
+            "actor": "Security Analyst"
+          }
+        ],
+        "containedAt": "2026-10-30T07:14:13.648Z"
+      }
+    },
+    {
+      "step": 14,
+      "name": "Authoritative Node Isolation Enforced",
+      "status": "PASS",
+      "details": "server-01 is isolated from network edges. Traffic severed authoritatively.",
+      "timestamp": "2026-10-30T07:14:13.655Z",
+      "evidence": {
+        "id": "server-01",
+        "name": "DMZ Web App Cluster",
+        "type": "server",
+        "ip": "10.0.1.10",
+        "status": "isolated",
+        "riskScore": 15,
+        "zone": "dmz",
+        "position": [
+          3,
+          2,
+          -2
+        ],
+        "services": [
+          "HTTPS (443)",
+          "Nginx 1.24",
+          "React Frontend SSR"
+        ],
+        "cpuUsage": 38,
+        "memoryUsage": 62,
+        "trafficRate": 30714
+      }
+    },
+    {
+      "step": 15,
+      "name": "Forensic Dossier & SHA-256 Tamper Seal",
+      "status": "PASS",
+      "details": "Tamper-evident forensic dossier compiled. SHA-256 seal: a5422935ca9759c694c673c86ed5d384909db8d0fe07a9f1f3972c9536cb5c0c",
+      "timestamp": "2026-10-30T07:14:13.657Z",
+      "evidence": {
+        "incidentId": "INC-6730",
+        "sha256Seal": "a5422935ca9759c694c673c86ed5d384909db8d0fe07a9f1f3972c9536cb5c0c",
+        "timelineEvents": 0
+      }
+    },
+    {
+      "step": 16,
+      "name": "Incident Resolution & Recovery Verification",
+      "status": "PASS",
+      "details": "Incident INC-6730 resolved. Remediation steps recorded in timeline.",
+      "timestamp": "2026-10-30T07:14:13.660Z",
+      "evidence": {
+        "id": "INC-6730",
+        "title": "DDoS Volumetric Inundation Attack",
+        "severity": "critical",
+        "status": "resolved",
+        "scenario": "DDoS",
+        "targetDeviceId": "server-01",
+        "affectedNodes": [
+          "server-01"
+        ],
+        "sourceIp": "198.51.50.43",
+        "timestamp": "2026-10-30T07:13:56.730Z",
+        "description": "ML detection engine flagged anomalous traffic profile: SYN flood volumetric surge targeting server-01 (10.0.1.10:80). Anomaly score 1.00, confidence 99%.",
+        "confidenceScore": 92,
+        "shapFactors": [
+          {
+            "feature": "Packet Rate Surge",
+            "value": "14493 pkts/s",
+            "impact": "Severe",
+            "contributionScore": 0.48
+          },
+          {
+            "feature": "Target Vulnerability Surface",
+            "value": "TCP:80",
+            "impact": "High",
+            "contributionScore": 0.32
+          },
+          {
+            "feature": "Source IP Reputation",
+            "value": "198.51.50.43",
+            "impact": "Moderate",
+            "contributionScore": 0.2
+          }
+        ],
+        "recommendedAction": "Deploy rate-limiting scrub rule and temporarily isolate external ingress to server-01",
+        "containmentApproved": true,
+        "timeline": [
+          {
+            "time": "2026-10-30T07:13:56.730Z",
+            "stage": "detected",
+            "description": "Automated detection triggered by anomalous traffic pattern (DDoS)",
+            "actor": "AI Detector"
+          },
+          {
+            "time": "2026-10-30T07:14:13.648Z",
+            "stage": "contained",
+            "description": "Approved containment: Target device server-01 isolated from DMZ traffic.",
+            "actor": "Security Analyst"
+          },
+          {
+            "time": "2026-10-30T07:14:13.659Z",
+            "stage": "resolved",
+            "description": "Verification tests passed. Incident marked resolved; forensic report generated.",
+            "actor": "Security Analyst"
+          }
+        ],
+        "containedAt": "2026-10-30T07:14:13.648Z",
+        "resolvedAt": "2026-10-30T07:14:13.659Z"
+      }
+    },
+    {
+      "step": 17,
+      "name": "Simulation Engine Shutdown",
+      "status": "PASS",
+      "details": "Simulation engine safely stopped and ticker unmounted.",
+      "timestamp": "2026-10-30T07:14:13.663Z"
+    }
+  ]
+}

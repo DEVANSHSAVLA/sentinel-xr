@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.sentinelxr.soc"
+    android:versionCode="200"
+    android:versionName="2.0.0-rc1"
+    android:installLocation="preferExternal">
+
+    <!-- Network & Backend Connectivity -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- ARCore & Camera Permissions -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.ar" android:required="true" />
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:glEsVersion="0x00030000" android:required="true" />
+
+    <application
+        android:label="SENTINEL-XR AR"
+        android:icon="@mipmap/app_icon"
+        android:banner="@drawable/app_banner"
+        android:isGame="false"
+        android:hasCode="true"
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+        android:hardwareAccelerated="true">
+
+        <!-- Google Play Services for AR (ARCore) required metadata -->
+        <meta-data android:name="com.google.ar.core" android:value="required" />
+        <meta-data android:name="unityplayer.SkipPermissionsDialog" android:value="true" />
+        <meta-data android:name="unity.splash-mode" android:value="0" />
+        <meta-data android:name="unity.splash-enable" android:value="false" />
+
+        <activity
+            android:name="com.unity3d.player.UnityPlayerActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|navigation"
+            android:screenOrientation="sensorLandscape"
+            android:launchMode="singleTask"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

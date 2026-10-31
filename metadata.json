@@ -1,0 +1,6 @@
+{
+  "name": "SENTINEL-XR",
+  "description": "AI-Driven Immersive Extended Reality Framework for Cyber Threat Visualization, Investigation and Incident Response.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

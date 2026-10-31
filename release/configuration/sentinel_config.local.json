@@ -1,0 +1,25 @@
+{
+  "environment": "local-dev",
+  "api": {
+    "baseUrl": "http://127.0.0.1:3000/api/v1",
+    "webSocketUrl": "ws://127.0.0.1:3000/ws",
+    "timeoutMs": 5000,
+    "retryAttempts": 5,
+    "retryBackoffMs": 1000
+  },
+  "auth": {
+    "enabled": true,
+    "defaultUser": "operator-01",
+    "token": "token-operator-alpha-9921"
+  },
+  "simulation": {
+    "enabled": true,
+    "autoInjectTelemetry": true,
+    "defaultScenario": "ddos"
+  },
+  "ai": {
+    "provider": "gemini-via-server",
+    "model": "gemini-2.5-flash",
+    "offlineFallback": true
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "application": {
+    "title": "SENTINEL-XR 2.0 SOC Console",
+    "version": "2.0.0-rc2",
+    "environment": "Production-Desktop",
+    "targetFrameRate": 60,
+    "vsync": true
+  },
+  "backend": {
+    "apiBaseUrl": "http://127.0.0.1:3000/api/v1",
+    "webSocketUrl": "ws://127.0.0.1:3000/ws",
+    "connectionTimeoutMs": 8000,
+    "reconnectIntervalMs": 3000,
+    "maxReconnectAttempts": 10
+  },
+  "security": {
+    "authRequired": true,
+    "defaultOperator": "operator-01",
+    "bearerToken": "token-operator-alpha-9921",
+    "strictTls": false
+  },
+  "graphics": {
+    "urpAsset": "ObsidianURP_HighQuality",
+    "hologramShader": "Custom/ObsidianHologram",
+    "hdrEnabled": true,
+    "bloomThreshold": 1.15
+  },
+  "telemetry": {
+    "telemetryPollIntervalMs": 2000,
+    "syntheticAnomalyAlertThreshold": 0.85,
+    "autoContainmentThreshold": 0.95
+  }
+}
