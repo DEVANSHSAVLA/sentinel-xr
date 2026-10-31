@@ -189,6 +189,7 @@ GameObject:
   m_Component:
   - component: {fileID: 201}
   - component: {fileID: 202}
+  - component: {fileID: 203}
   m_Layer: 0
   m_Name: "PlayerCamera"
   m_TagString: MainCamera
@@ -223,3 +224,11 @@ Camera:
   near clip plane: 0.1
   far clip plane: 500
   field of view: 75
+--- !u!81 &203
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200}
+  m_Enabled: 1

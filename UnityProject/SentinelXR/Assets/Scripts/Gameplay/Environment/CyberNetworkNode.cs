@@ -38,6 +38,10 @@ namespace SentinelXR.Gameplay.Environment
         public float CorruptionLevel => corruptionLevel;
         public bool IsCompromised => currentIntegrity <= 0 || corruptionLevel >= 100f;
 
+        public static event System.Action<CyberNetworkNode, float> OnNodeUnderAttack;
+        public static event System.Action<CyberNetworkNode, float> OnNodeIntegrityChanged;
+        public static event System.Action<CyberNetworkNode> OnNodeSecured;
+
         private void Start()
         {
             if (nodeRenderer == null)
@@ -76,6 +80,9 @@ namespace SentinelXR.Gameplay.Environment
             corruptionLevel = Mathf.Clamp(corruptionLevel + amount * 0.8f, 0f, 100f);
             UpdateVisualState();
 
+            OnNodeUnderAttack?.Invoke(this, currentIntegrity);
+            OnNodeIntegrityChanged?.Invoke(this, currentIntegrity);
+
             if (IsCompromised)
             {
                 Debug.LogWarning($"[CyberNetworkNode] {NodeName} ({NodeIp}) has been COMPROMISED by breach!");
@@ -87,6 +94,12 @@ namespace SentinelXR.Gameplay.Environment
             currentIntegrity = Mathf.Clamp(currentIntegrity + amount, 0f, maxIntegrity);
             corruptionLevel = Mathf.Clamp(corruptionLevel - amount * 1.2f, 0f, 100f);
             UpdateVisualState();
+
+            OnNodeIntegrityChanged?.Invoke(this, currentIntegrity);
+            if (currentIntegrity >= 98f && corruptionLevel <= 2f)
+            {
+                OnNodeSecured?.Invoke(this);
+            }
         }
 
         public void RevealNodeDiagnostics(float duration = 4.0f)

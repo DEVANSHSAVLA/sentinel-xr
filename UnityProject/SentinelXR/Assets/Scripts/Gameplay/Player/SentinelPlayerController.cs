@@ -110,6 +110,10 @@ namespace SentinelXR.Gameplay.Player
             {
                 playerCamera = GetComponentInChildren<Camera>();
             }
+            if (playerCamera != null && SentinelAudioSystem.Instance != null)
+            {
+                SentinelAudioSystem.Instance.RegisterActiveCamera(playerCamera);
+            }
         }
 
         private void OnDestroy()
@@ -128,6 +132,10 @@ namespace SentinelXR.Gameplay.Player
         public void InitializeMission(float protectionOverride = -1f)
         {
             InitializeSingleton();
+            if (playerCamera != null && SentinelAudioSystem.Instance != null)
+            {
+                SentinelAudioSystem.Instance.RegisterActiveCamera(playerCamera);
+            }
             currentHealth = maxHealth;
             currentShield = maxShield;
             isDead = false;

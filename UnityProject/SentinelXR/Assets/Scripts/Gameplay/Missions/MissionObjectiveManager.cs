@@ -22,6 +22,10 @@ namespace SentinelXR.Gameplay.Missions
         [Header("Mission 01 Objectives")]
         [SerializeField] private List<MissionObjective> objectives = new List<MissionObjective>();
 
+        [Header("Gateway Balancing & Tracking")]
+        [SerializeField] private float gatewayStartingIntegrity = 50.0f; // Configurable starting integrity
+        [SerializeField] private float gatewayCriticalThreshold = 25.0f;
+
         [Header("Tracking Metrics")]
         [SerializeField] private int threatsEliminatedCount = 0;
         [SerializeField] private int requiredThreatsWave1 = 5;
@@ -29,15 +33,59 @@ namespace SentinelXR.Gameplay.Missions
         [SerializeField] private float missionTimer = 0f;
 
         private CyberNetworkNode[] networkNodes;
+        private CyberNetworkNode gatewayNode;
         private BreachCoreBoss breachCore;
+        private bool isGatewayUnderAttack = false;
+        private float gatewayAttackTimer = 0f;
 
         public List<MissionObjective> Objectives => objectives;
         public float SubnetIntegrity => subnetIntegrity;
         public float MissionTime => missionTimer;
         public int ThreatsEliminated => threatsEliminatedCount;
+        public CyberNetworkNode PrimaryGatewayNode => gatewayNode;
+        public float GatewayIntegrity => gatewayNode != null ? gatewayNode.CurrentIntegrity : 100f;
+        public bool IsGatewayUnderAttack => isGatewayUnderAttack || gatewayAttackTimer > 0f;
+        public float GatewayCriticalThreshold => gatewayCriticalThreshold;
 
         public event Action<MissionObjective> OnObjectiveCompleted;
         public event Action<float> OnSubnetIntegrityChanged;
+        public event Action<CyberNetworkNode, float> OnGatewayIntegrityAlert;
+
+        private void OnEnable()
+        {
+            CyberNetworkNode.OnNodeUnderAttack += HandleNodeUnderAttack;
+        }
+
+        private void OnDisable()
+        {
+            CyberNetworkNode.OnNodeUnderAttack -= HandleNodeUnderAttack;
+        }
+
+        private void HandleNodeUnderAttack(CyberNetworkNode node, float currentInteg)
+        {
+            if (node != null && node.Role == NetworkNodeRole.EdgeGateway)
+            {
+                isGatewayUnderAttack = true;
+                gatewayAttackTimer = 4.0f;
+                OnGatewayIntegrityAlert?.Invoke(node, currentInteg);
+            }
+        }
+
+        public void NotifyGatewayTargeted(CyberNetworkNode node)
+        {
+            if (node != null && node.Role == NetworkNodeRole.EdgeGateway)
+            {
+                isGatewayUnderAttack = true;
+                gatewayAttackTimer = 5.0f;
+                OnGatewayIntegrityAlert?.Invoke(node, node.CurrentIntegrity);
+            }
+        }
+
+        public bool IsObjectiveCompleted(string id)
+        {
+            var obj = objectives.Find(o => o.id == id);
+            return obj != null && obj.isCompleted;
+        }
 
         private void Awake()
         {
@@ -57,7 +105,9 @@ namespace SentinelXR.Gameplay.Missions
                 {
                     if (node.Role == NetworkNodeRole.EdgeGateway)
                     {
-                        node.TakeCorruptionDamage(65f); // Sets integrity to 35%, corruption to 65%
+                        gatewayNode = node;
+                        float damageToDeal = Mathf.Max(0f, node.MaxIntegrity - gatewayStartingIntegrity);
+                        node.TakeCorruptionDamage(damageToDeal);
                     }
                 }
             }
@@ -68,6 +118,15 @@ namespace SentinelXR.Gameplay.Missions
             if (GameManager.Instance != null && GameManager.Instance.CurrentState != GameState.InMission)
             {
                 return;
+            }
+
+            if (gatewayAttackTimer > 0f)
+            {
+                gatewayAttackTimer -= Time.deltaTime;
+                if (gatewayAttackTimer <= 0f)
+                {
+                    isGatewayUnderAttack = false;
+                }
             }
 
             missionTimer += Time.deltaTime;

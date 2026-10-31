@@ -1,6 +1,6 @@
 # SENTINEL-XR — COMBAT REGRESSION & ONBOARDING TEST EXECUTION REPORT
 
-**Execution Timestamp:** 2026-10-31 05:41:54 UTC
+**Execution Timestamp:** 2026-10-31 08:19:04 UTC
 **Unity Version:** 6000.0.23f1
 **Target Platform:** StandaloneWindows64
 
@@ -8,21 +8,21 @@
 
 | # | Test Name | Status | Duration | Details |
 |---|---|---|---|---|
-| 1 | `Test01_PlayerReceivesNoDamageDuringSpawnProtection` | **PASS** | 125 ms | Assertion satisfied within valid contract range. |
-| 2 | `Test02_PlayerMovementWorksDuringProtection` | **PASS** | 37 ms | Assertion satisfied within valid contract range. |
-| 3 | `Test03_PlayerReceivesDamageNormallyAfterProtectionExpires` | **PASS** | 8 ms | Assertion satisfied within valid contract range. |
-| 4 | `Test04_EnemyAttackCooldownEnforcedBetweenAttacks` | **PASS** | 15 ms | Assertion satisfied within valid contract range. |
-| 5 | `Test05_SingleAttackDoesNotTriggerMultipleDamageInSameFrame` | **PASS** | 26 ms | Assertion satisfied within valid contract range. |
-| 6 | `Test06_MultipleEnemiesMaintainSeparateCooldowns` | **PASS** | 43 ms | Assertion satisfied within valid contract range. |
-| 7 | `Test07_ProjectileAttacksDoNotDamageDeadPlayer` | **PASS** | 25 ms | Assertion satisfied within valid contract range. |
-| 8 | `Test08_DefensiveToolsSelectableDuringCombatAndProtection` | **PASS** | 20 ms | Assertion satisfied within valid contract range. |
-| 9 | `Test09_PlayerHealthClampsToZeroNeverNegative` | **PASS** | 106 ms | Assertion satisfied within valid contract range. |
-| 10 | `Test10_DieTriggersExactlyOnce` | **PASS** | 22 ms | Assertion satisfied within valid contract range. |
-| 11 | `Test11_SpawningAndAttacksHaltOnMissionFailed` | **PASS** | 24 ms | Assertion satisfied within valid contract range. |
-| 12 | `Test12_RestartRestoresHealthShieldsCooldownsAndProtection` | **PASS** | 32 ms | Assertion satisfied within valid contract range. |
-| 13 | `Test13_QAInvulnerabilityToggle` | **PASS** | 5 ms | Assertion satisfied within valid contract range. |
-| 14 | `Test14_DuplicateToolSelectionSuppressed` | **PASS** | 8 ms | Assertion satisfied within valid contract range. |
-| 15 | `Test15_FirewallShieldTagAndComponentContract` | **PASS** | 65 ms | Assertion satisfied within valid contract range. |
+| 1 | `Test01_PlayerReceivesNoDamageDuringSpawnProtection` | **PASS** | 53 ms | Assertion satisfied within valid contract range. |
+| 2 | `Test02_PlayerMovementWorksDuringProtection` | **PASS** | 35 ms | Assertion satisfied within valid contract range. |
+| 3 | `Test03_PlayerReceivesDamageNormallyAfterProtectionExpires` | **PASS** | 18 ms | Assertion satisfied within valid contract range. |
+| 4 | `Test04_EnemyAttackCooldownEnforcedBetweenAttacks` | **PASS** | 10 ms | Assertion satisfied within valid contract range. |
+| 5 | `Test05_SingleAttackDoesNotTriggerMultipleDamageInSameFrame` | **PASS** | 37 ms | Assertion satisfied within valid contract range. |
+| 6 | `Test06_MultipleEnemiesMaintainSeparateCooldowns` | **PASS** | 10 ms | Assertion satisfied within valid contract range. |
+| 7 | `Test07_ProjectileAttacksDoNotDamageDeadPlayer` | **PASS** | 5 ms | Assertion satisfied within valid contract range. |
+| 8 | `Test08_DefensiveToolsSelectableDuringCombatAndProtection` | **PASS** | 5 ms | Assertion satisfied within valid contract range. |
+| 9 | `Test09_PlayerHealthClampsToZeroNeverNegative` | **PASS** | 5 ms | Assertion satisfied within valid contract range. |
+| 10 | `Test10_DieTriggersExactlyOnce` | **PASS** | 39 ms | Assertion satisfied within valid contract range. |
+| 11 | `Test11_SpawningAndAttacksHaltOnMissionFailed` | **PASS** | 2 ms | Assertion satisfied within valid contract range. |
+| 12 | `Test12_RestartRestoresHealthShieldsCooldownsAndProtection` | **PASS** | 9 ms | Assertion satisfied within valid contract range. |
+| 13 | `Test13_QAInvulnerabilityToggle` | **PASS** | 3 ms | Assertion satisfied within valid contract range. |
+| 14 | `Test14_DuplicateToolSelectionSuppressed` | **PASS** | 2 ms | Assertion satisfied within valid contract range. |
+| 15 | `Test15_FirewallShieldTagAndComponentContract` | **PASS** | 2 ms | Assertion satisfied within valid contract range. |
 
 **EditMode Summary:** 15/15 Passed (100.0%)
 

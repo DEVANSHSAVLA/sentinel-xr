@@ -173,6 +173,7 @@ GameObject:
   m_Component:
   - component: {fileID: 201}
   - component: {fileID: 202}
+  - component: {fileID: 203}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -252,3 +253,11 @@ SceneRoots:
   m_Roots:
   - {fileID: 101}
   - {fileID: 201}
+--- !u!81 &203
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200}
+  m_Enabled: 1

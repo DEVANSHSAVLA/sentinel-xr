@@ -4,6 +4,7 @@ using UnityEngine;
 using SentinelXR.Gameplay.Player;
 using SentinelXR.Gameplay.Missions;
 using SentinelXR.Gameplay.Enemies;
+using SentinelXR.Gameplay.Environment;
 
 namespace SentinelXR.Gameplay.UI
 {
@@ -92,6 +93,8 @@ namespace SentinelXR.Gameplay.UI
             {
                 objectives.OnObjectiveCompleted -= HandleObjectiveCompleted;
                 objectives.OnObjectiveCompleted += HandleObjectiveCompleted;
+                objectives.OnGatewayIntegrityAlert -= HandleGatewayIntegrityAlert;
+                objectives.OnGatewayIntegrityAlert += HandleGatewayIntegrityAlert;
             }
 
             if (inventory != null)
@@ -110,6 +113,7 @@ namespace SentinelXR.Gameplay.UI
             if (objectives != null)
             {
                 objectives.OnObjectiveCompleted -= HandleObjectiveCompleted;
+                objectives.OnGatewayIntegrityAlert -= HandleGatewayIntegrityAlert;
             }
             if (inventory != null)
             {
@@ -133,6 +137,14 @@ namespace SentinelXR.Gameplay.UI
         private void HandleObjectiveCompleted(MissionObjective obj)
         {
             ShowToast($"OBJECTIVE ACCOMPLISHED: {obj.title.ToUpper()}", ColorGreen, 4.0f);
+        }
+
+        private void HandleGatewayIntegrityAlert(CyberNetworkNode node, float currentInteg)
+        {
+            if (currentInteg > 0f)
+            {
+                ShowToast($"⚠ PRIORITY: {node.NodeName.ToUpper()} UNDER ATTACK ({currentInteg:F0}%)!", ColorCriticalRed, 3.5f);
+            }
         }
 
         private void HandleToolSelected(CyberToolType tool)
@@ -252,7 +264,10 @@ namespace SentinelXR.Gameplay.UI
             // 5. CENTER: Reticle, Enemy Targeting, Interaction Prompt
             DrawCenterReticle(screenW, screenH);
 
-            // 6. TOP-CENTER: Boss Health Bar (when Boss Active) or Notification Toast
+            // 6. TOP-CENTER: Gateway Corruption Warning & Waypoint Guidance (if under attack or critical)
+            DrawGatewayWarningBanner(screenW, screenH);
+
+            // 7. TOP-CENTER: Boss Health Bar (when Boss Active) or Notification Toast
             DrawTopCenterBossAndToasts(screenW);
         }
 
@@ -315,35 +330,48 @@ namespace SentinelXR.Gameplay.UI
 
         private void DrawTopRightPanel(int screenW)
         {
-            Rect r = new Rect(screenW - 390, 20, 370, 165);
+            Rect r = new Rect(screenW - 390, 20, 370, 195);
             DrawGlassBox(r, ColorBorderCyan);
 
             // Header
-            GUI.Label(new Rect(screenW - 378, 26, 350, 18), "NETWORK TELEMETRY & OBJECTIVES", styleTitle);
+            GUI.Label(new Rect(screenW - 378, 24, 350, 18), "NETWORK TELEMETRY & OBJECTIVES", styleTitle);
 
             // Subnet Integrity
             float subnet = objectives != null ? Mathf.Clamp01(objectives.SubnetIntegrity / 100f) : 1f;
             Color netCol = subnet > 0.5f ? ColorBorderCyan : (subnet > 0.25f ? ColorWarningAmber : ColorCriticalRed);
-            GUI.Label(new Rect(screenW - 378, 46, 200, 16), $"SUBNET INTEGRITY: {Mathf.RoundToInt(subnet * 100)}%", styleSubtitle);
-            DrawBar(new Rect(screenW - 378, 64, 346, 8), subnet, netCol, new Color(0.1f, 0.15f, 0.25f, 0.8f));
+            GUI.Label(new Rect(screenW - 378, 44, 200, 16), $"SUBNET INTEGRITY: {Mathf.RoundToInt(subnet * 100)}%", styleSubtitle);
+            DrawBar(new Rect(screenW - 378, 60, 346, 6), subnet, netCol, new Color(0.1f, 0.15f, 0.25f, 0.8f));
+
+            // Gateway Integrity
+            float gwIntegrity = objectives != null ? objectives.GatewayIntegrity : 100f;
+            float gwPct = Mathf.Clamp01(gwIntegrity / 100f);
+            Color gwCol = gwPct > 0.5f ? ColorBorderCyan : (gwPct > 0.25f ? ColorWarningAmber : ColorCriticalRed);
+            if (objectives != null && objectives.IsGatewayUnderAttack)
+            {
+                float pulse = Mathf.PingPong(Time.time * 6f, 1f);
+                gwCol = Color.Lerp(ColorWarningAmber, ColorCriticalRed, pulse);
+            }
+            string gwStatus = gwPct >= 0.98f ? "SECURE" : (objectives != null && objectives.IsGatewayUnderAttack ? "INFILTRATED" : "COMPROMISED");
+            GUI.Label(new Rect(screenW - 378, 70, 350, 16), $"DMZ GATEWAY: {Mathf.RoundToInt(gwIntegrity)}% [{gwStatus}]", styleSubtitle);
+            DrawBar(new Rect(screenW - 378, 86, 346, 6), gwPct, gwCol, new Color(0.1f, 0.15f, 0.25f, 0.8f));
 
             // Threat count & Wave
             int enemiesAlive = FindObjectsOfType<EnemyBase>().Length;
             int threatsDefeated = objectives != null ? objectives.ThreatsEliminated : 0;
             string threatStr = $"ACTIVE HOSTILES: {enemiesAlive} | PURGED: {threatsDefeated}";
-            GUI.Label(new Rect(screenW - 378, 76, 350, 16), threatStr, styleSubtitle);
+            GUI.Label(new Rect(screenW - 378, 96, 350, 16), threatStr, styleSubtitle);
 
             // Objective list
             if (objectives != null && objectives.Objectives != null)
             {
-                int y = 96;
+                int y = 114;
                 for (int i = 0; i < objectives.Objectives.Count; i++)
                 {
                     var obj = objectives.Objectives[i];
                     string prefix = obj.isCompleted ? "[✓] " : $"[{i + 1}] ";
                     GUIStyle s = obj.isCompleted ? styleObjectiveDone : styleObjectiveActive;
                     GUI.Label(new Rect(screenW - 378, y, 350, 16), $"{prefix}{obj.title}", s);
-                    y += 16;
+                    y += 18;
                 }
             }
         }
@@ -464,6 +492,56 @@ namespace SentinelXR.Gameplay.UI
                 GUI.color = ColorBorderCyan;
                 GUI.Label(new Rect(scanR.x + 6, scanR.y + 3, scanR.width - 12, 18), scanner.LastDecodedTelemetry, styleSubtitle);
             }
+        }
+
+        private void DrawGatewayWarningBanner(int screenW, int screenH)
+        {
+            if (objectives == null) return;
+            var gw = objectives.PrimaryGatewayNode;
+            if (gw == null) return;
+
+            bool isUnderAttack = objectives.IsGatewayUnderAttack;
+            bool isCritical = gw.CurrentIntegrity < 45f && !objectives.IsObjectiveCompleted("OBJ-02");
+
+            if (isUnderAttack || isCritical)
+            {
+                float bannerW = 560;
+                float bannerH = 54;
+                float cx = screenW * 0.5f;
+                float yPos = 80;
+                Rect bRect = new Rect(cx - bannerW * 0.5f, yPos, bannerW, bannerH);
+
+                float pulse = Mathf.PingPong(Time.time * 5f, 1f);
+                Color warnCol = Color.Lerp(ColorWarningAmber, ColorCriticalRed, pulse);
+                DrawGlassBox(bRect, warnCol);
+
+                string navGuide = GetGatewayNavGuide(gw.transform.position);
+
+                GUI.color = warnCol;
+                string title = isUnderAttack
+                    ? "⚠ CRITICAL ALERT: [NODE_DMZGATEWAY] UNDER ACTIVE INFILTRATION!"
+                    : "⚠ WARNING: [NODE_DMZGATEWAY] COMPROMISED — REPAIRS REQUIRED!";
+                GUI.Label(new Rect(bRect.x + 12, bRect.y + 6, bRect.width - 24, 18), title, styleTitle);
+
+                GUI.color = Color.white;
+                string detail = $"INTEGRITY: {Mathf.RoundToInt(gw.CurrentIntegrity)}% | ACTION: Deploy Patch Tool [2] beam! {navGuide}";
+                GUI.Label(new Rect(bRect.x + 12, bRect.y + 28, bRect.width - 24, 18), detail, styleSubtitle);
+            }
+        }
+
+        private string GetGatewayNavGuide(Vector3 gwPos)
+        {
+            if (player == null || player.PlayerCamera == null) return "";
+            Vector3 toNode = gwPos - player.transform.position;
+            float dist = toNode.magnitude;
+            Vector3 localDir = player.PlayerCamera.transform.InverseTransformDirection(toNode.normalized);
+
+            string arrow = "▲";
+            if (localDir.z < -0.3f) arrow = "▼";
+            else if (localDir.x < -0.3f) arrow = "◄";
+            else if (localDir.x > 0.3f) arrow = "►";
+
+            return $"| WAYPOINT: [{arrow} {dist:F0}m]";
         }
 
         private void DrawTopCenterBossAndToasts(int screenW)

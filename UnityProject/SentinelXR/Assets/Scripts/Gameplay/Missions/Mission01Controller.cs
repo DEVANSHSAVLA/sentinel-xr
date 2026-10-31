@@ -8,8 +8,8 @@ namespace SentinelXR.Gameplay.Missions
     {
         [Header("Spawn Settings")]
         [SerializeField] private Transform[] spawnPoints;
-        [SerializeField] private float initialSpawnDelay = 3.0f;
-        [SerializeField] private float waveInterval = 8.0f;
+        [SerializeField] private float initialSpawnDelay = 4.0f;
+        [SerializeField] private float waveInterval = 10.0f;
         [SerializeField] private int maxSimultaneousEnemies = 4;
 
         private int enemiesSpawned = 0;

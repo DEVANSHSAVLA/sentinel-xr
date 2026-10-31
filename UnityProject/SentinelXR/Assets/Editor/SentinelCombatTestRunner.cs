@@ -53,6 +53,17 @@ namespace SentinelXR.Editor
                 catch { }
                 SentinelBuildPipeline.BuildMission01Standalone();
             }
+
+            string validationFlagPath = Path.Combine(Directory.GetCurrentDirectory(), "run_gameplay_validation.flag");
+            if (File.Exists(validationFlagPath))
+            {
+                try
+                {
+                    File.Delete(validationFlagPath);
+                }
+                catch { }
+                SentinelGameplayProgressionValidator.RunFullValidation();
+            }
         }
 
         [MenuItem("SENTINEL-XR/Run Combat Regression Tests", false, 4)]

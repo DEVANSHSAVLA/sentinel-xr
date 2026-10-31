@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SentinelXR.Gameplay
 {
@@ -6,12 +8,16 @@ namespace SentinelXR.Gameplay
     /// Procedural futuristic synthesizer and sound effect manager for SENTINEL-XR.
     /// Mathematically generates cyberpunk UI, combat, scanner, and feedback audio
     /// without requiring external audio asset dependencies.
+    /// Manages an event-driven AudioListener lifecycle across scene transitions
+    /// and active gameplay cameras, ensuring zero missing-listener warnings.
     /// </summary>
     public class SentinelAudioSystem : MonoBehaviour
     {
         public static SentinelAudioSystem Instance { get; private set; }
+        public static AudioListener ActiveListener { get; private set; }
 
         private AudioSource audioSource;
+        private AudioListener fallbackListener;
 
         private AudioClip clipUiClick;
         private AudioClip clipScanPulse;
@@ -23,6 +29,7 @@ namespace SentinelXR.Gameplay
         private AudioClip clipEnemyPurged;
         private AudioClip clipMissionSuccess;
         private AudioClip clipMissionFailed;
+        private AudioClip clipGatewayAlert;
 
         private const int SAMPLE_RATE = 44100;
 
@@ -33,11 +40,22 @@ namespace SentinelXR.Gameplay
                 Instance = this;
                 if (Application.isPlaying) DontDestroyOnLoad(gameObject);
                 InitAudioSource();
+                InitFallbackListener();
                 GenerateProceduralClips();
+                SceneManager.sceneLoaded += OnSceneLoaded;
+                ResolveActiveListener(null);
             }
             else if (Instance != this)
             {
                 Destroy(gameObject);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this)
+            {
+                SceneManager.sceneLoaded -= OnSceneLoaded;
             }
         }
 
@@ -52,6 +70,97 @@ namespace SentinelXR.Gameplay
             audioSource.spatialBlend = 0f; // 2D clean HUD audio
         }
 
+        private void InitFallbackListener()
+        {
+            fallbackListener = GetComponent<AudioListener>();
+            if (fallbackListener == null)
+            {
+                fallbackListener = gameObject.AddComponent<AudioListener>();
+            }
+            fallbackListener.enabled = false;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            ResolveActiveListener(null);
+        }
+
+        /// <summary>
+        /// Explicitly registers the active gameplay camera (e.g. PlayerCamera in Mission01)
+        /// as the authoritative AudioListener. Disables all other listeners to prevent duplicates.
+        /// </summary>
+        public AudioListener RegisterActiveCamera(Camera cam)
+        {
+            return ResolveActiveListener(cam);
+        }
+
+        /// <summary>
+        /// Resolves and enforces exactly one enabled AudioListener in the active scene.
+        /// Prioritizes preferred camera -> Camera.main -> any active camera -> fallback listener.
+        /// </summary>
+        public AudioListener ResolveActiveListener(Camera preferredCamera = null)
+        {
+            Camera targetCam = preferredCamera;
+            if (targetCam == null || !targetCam.gameObject.activeInHierarchy || !targetCam.enabled)
+            {
+                targetCam = Camera.main;
+            }
+
+            if (targetCam == null || !targetCam.gameObject.activeInHierarchy || !targetCam.enabled)
+            {
+                Camera[] allCams = FindObjectsByType<Camera>(FindObjectsSortMode.None);
+                foreach (var c in allCams)
+                {
+                    if (c != null && c.gameObject.activeInHierarchy && c.enabled)
+                    {
+                        targetCam = c;
+                        break;
+                    }
+                }
+            }
+
+            AudioListener selectedListener = null;
+
+            if (targetCam != null)
+            {
+                selectedListener = targetCam.GetComponent<AudioListener>();
+                if (selectedListener == null)
+                {
+                    selectedListener = targetCam.gameObject.AddComponent<AudioListener>();
+                }
+                selectedListener.enabled = true;
+                ActiveListener = selectedListener;
+
+                if (fallbackListener != null && fallbackListener != selectedListener)
+                {
+                    fallbackListener.enabled = false;
+                }
+            }
+            else
+            {
+                // Headless or transition state: engage fallback listener on audio singleton
+                if (fallbackListener == null)
+                {
+                    InitFallbackListener();
+                }
+                fallbackListener.enabled = true;
+                selectedListener = fallbackListener;
+                ActiveListener = fallbackListener;
+            }
+
+            // Enforce single-listener rule: disable all other active listeners
+            AudioListener[] allListeners = FindObjectsByType<AudioListener>(FindObjectsSortMode.None);
+            foreach (var l in allListeners)
+            {
+                if (l != null && l != selectedListener && l.enabled)
+                {
+                    l.enabled = false;
+                }
+            }
+
+            return ActiveListener;
+        }
+
         private void GenerateProceduralClips()
         {
             clipUiClick = GenerateBlip(0.04f, 1800f, 2400f);
@@ -64,6 +173,7 @@ namespace SentinelXR.Gameplay
             clipEnemyPurged = GeneratePurgeChime(0.28f, 1200f, 600f);
             clipMissionSuccess = GenerateSuccessArpeggio();
             clipMissionFailed = GenerateFailureTones();
+            clipGatewayAlert = GenerateGatewayAlert();
         }
 
         public void PlayUiClick() => PlayOneShot(clipUiClick, 0.6f);
@@ -76,10 +186,16 @@ namespace SentinelXR.Gameplay
         public void PlayEnemyPurged() => PlayOneShot(clipEnemyPurged, 0.7f);
         public void PlayMissionSuccess() => PlayOneShot(clipMissionSuccess, 0.9f);
         public void PlayMissionFailed() => PlayOneShot(clipMissionFailed, 0.9f);
+        public void PlayGatewayAlert() => PlayOneShot(clipGatewayAlert, 0.85f);
 
         private void PlayOneShot(AudioClip clip, float volume = 1.0f)
         {
-            if (audioSource != null && clip != null)
+            if (audioSource == null) return;
+            if (ActiveListener == null || !ActiveListener.enabled)
+            {
+                ResolveActiveListener(null);
+            }
+            if (clip != null)
             {
                 audioSource.PlayOneShot(clip, volume);
             }
@@ -140,7 +256,7 @@ namespace SentinelXR.Gameplay
                 float t = (float)i / samples;
                 float freq = Mathf.Lerp(startFreq, endFreq, t * t);
                 float env = Mathf.Pow(1f - t, 0.7f);
-                float noise = (Random.value * 2f - 1f) * 0.15f * (1f - t);
+                float noise = (UnityEngine.Random.value * 2f - 1f) * 0.15f * (1f - t);
                 data[i] = (Mathf.Sin(2f * Mathf.PI * freq * (float)i / SAMPLE_RATE) + noise) * env;
             }
             return CreateClip("BassDrop", data);
@@ -187,7 +303,7 @@ namespace SentinelXR.Gameplay
                 float t = (float)i / samples;
                 float freq = Mathf.Lerp(startFreq, endFreq, t);
                 float env = Mathf.Pow(1f - t, 2f);
-                float noise = (Random.value * 2f - 1f) * 0.25f * env;
+                float noise = (UnityEngine.Random.value * 2f - 1f) * 0.25f * env;
                 data[i] = (Mathf.Sin(2f * Mathf.PI * freq * (float)i / SAMPLE_RATE) + noise) * env;
             }
             return CreateClip("Thud", data);
@@ -245,6 +361,22 @@ namespace SentinelXR.Gameplay
                 data[i] = Mathf.Sin(2f * Mathf.PI * freq * timeSec) * env * 0.7f;
             }
             return CreateClip("FailureTones", data);
+        }
+
+        private AudioClip GenerateGatewayAlert()
+        {
+            float duration = 0.6f;
+            int samples = (int)(SAMPLE_RATE * duration);
+            float[] data = new float[samples];
+            for (int i = 0; i < samples; i++)
+            {
+                float timeSec = (float)i / SAMPLE_RATE;
+                // Alternating 880Hz and 440Hz every 0.15s
+                float freq = ((int)(timeSec / 0.15f) % 2 == 0) ? 880f : 440f;
+                float env = Mathf.Sin((timeSec % 0.15f) / 0.15f * Mathf.PI);
+                data[i] = Mathf.Sin(2f * Mathf.PI * freq * timeSec) * env * 0.75f;
+            }
+            return CreateClip("GatewayAlert", data);
         }
 
         private AudioClip CreateClip(string name, float[] samples)
