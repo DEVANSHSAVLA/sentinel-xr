@@ -2,11 +2,12 @@
 """
 build_sla3_matched_report.py
 Generates the complete, rigorous B.Tech SLA Stage 3 Academic Report for
-SENTINEL-XR: BREACH PROTOCOL matching the exact structure, chapters, sections,
-tables, and academic formatting of the reference SLA3.pdf report.
+SENTINEL-XR: BREACH PROTOCOL strictly formatted as per IEEE guidelines and
+using 100% Times New Roman typography throughout.
 
 Student: DEVANSH SAVLA | Roll No: 56 | PRN: 23UF18356CM172 | Class: B.TECH-03-56
 Institution: Shah & Anchor Kutchhi Engineering College, Chembur, Mumbai
+Course: Virtual Reality (Semester VII, Final Year B.Tech.)
 """
 
 import os
@@ -28,11 +29,11 @@ docx_path = os.path.join(base_dir, "SENTINEL_XR_SLA_STAGE_3_REPORT.docx")
 pdf_path = os.path.join(base_dir, "SENTINEL_XR_SLA_STAGE_3_REPORT.pdf")
 fig_dir = os.path.join(base_dir, "FIGURES")
 
-print("Initializing SLA Stage 3 Academic Report Generator...")
+print("Initializing IEEE-Compliant SLA Stage 3 Academic Report Generator...")
 doc = docx.Document()
 
 # -------------------------------------------------------------
-# PAGE SETUP - A4 Portrait with Standard Academic Margins
+# 1. PAGE SETUP - A4 Portrait with Standard Academic Margins
 # -------------------------------------------------------------
 for section in doc.sections:
     section.page_width = Inches(8.27)    # A4 Width
@@ -42,17 +43,108 @@ for section in doc.sections:
     section.left_margin = Inches(1.25)   # Binding Margin
     section.right_margin = Inches(1.0)
 
+# -------------------------------------------------------------
+# 2. DOCUMENT DEFAULTS - STRICT TIMES NEW ROMAN
+# -------------------------------------------------------------
 styles = doc.styles
 normal_style = styles['Normal']
 normal_style.font.name = 'Times New Roman'
-normal_style.font.size = Pt(11.5)
+normal_style.font.size = Pt(11)
 normal_style.font.color.rgb = RGBColor(0, 0, 0)
 normal_style.paragraph_format.line_spacing = 1.15
 normal_style.paragraph_format.space_after = Pt(4)
+normal_style.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+
+# Enforce Times New Roman in document-wide XML defaults
+doc_rPr = doc.styles.element.xpath('w:docDefaults/w:rPrDefault/w:rPr')
+if doc_rPr:
+    rFonts_def = parse_xml(
+        f'<w:rFonts {nsdecls("w")} w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman" w:eastAsia="Times New Roman"/>'
+    )
+    doc_rPr[0].append(rFonts_def)
+
+def enforce_tnr(run, size=None, bold=None, italic=None, color=RGBColor(0, 0, 0)):
+    run.font.name = 'Times New Roman'
+    if size: run.font.size = size
+    if bold is not None: run.bold = bold
+    if italic is not None: run.italic = italic
+    if color: run.font.color.rgb = color
+    rPr = run._r.get_or_add_rPr()
+    rFonts = parse_xml(
+        f'<w:rFonts {nsdecls("w")} w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman" w:eastAsia="Times New Roman"/>'
+    )
+    rPr.append(rFonts)
 
 # -------------------------------------------------------------
-# XML HELPER FUNCTIONS FOR FORMATTING & TABLES
+# 3. IEEE PARAGRAPH & TYPOGRAPHY BUILDERS
 # -------------------------------------------------------------
+def add_p(text, bold=False, italic=False, size=Pt(11), align=WD_ALIGN_PARAGRAPH.JUSTIFY, space_before=Pt(0), space_after=Pt(4), color=RGBColor(0, 0, 0), line_spacing=1.15):
+    p = doc.add_paragraph()
+    p.alignment = align
+    p.paragraph_format.space_before = space_before
+    p.paragraph_format.space_after = space_after
+    p.paragraph_format.line_spacing = line_spacing
+    run = p.add_run(text)
+    enforce_tnr(run, size=size, bold=bold, italic=italic, color=color)
+    return p
+
+def add_chapter_header(chap_num, title):
+    doc.add_page_break()
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.space_before = Pt(12)
+    p.paragraph_format.space_after = Pt(2)
+    r1 = p.add_run(f"Chapter {chap_num}\n")
+    enforce_tnr(r1, size=Pt(18), bold=True)
+    r2 = p.add_run(title)
+    enforce_tnr(r2, size=Pt(15), bold=True)
+    p.paragraph_format.space_after = Pt(16)
+
+def add_sec(title):
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    p.paragraph_format.space_before = Pt(12)
+    p.paragraph_format.space_after = Pt(3)
+    run = p.add_run(title)
+    enforce_tnr(run, size=Pt(12.5), bold=True)
+    return p
+
+def add_subsec(title):
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    p.paragraph_format.space_before = Pt(8)
+    p.paragraph_format.space_after = Pt(2)
+    run = p.add_run(title)
+    enforce_tnr(run, size=Pt(11), bold=True)
+    return p
+
+def add_bullet(text):
+    p = doc.add_paragraph(style='List Bullet')
+    p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    p.paragraph_format.space_before = Pt(0)
+    p.paragraph_format.space_after = Pt(2)
+    p.paragraph_format.line_spacing = 1.15
+    run = p.add_run(text)
+    enforce_tnr(run, size=Pt(11))
+    return p
+
+# -------------------------------------------------------------
+# 4. IEEE TABLE & FIGURE BUILDERS
+# -------------------------------------------------------------
+def set_ieee_table_borders(table):
+    tblPr = table._tbl.tblPr
+    borders = parse_xml(
+        f'<w:tblBorders {nsdecls("w")}>'
+        f'  <w:top w:val="single" w:sz="8" w:space="0" w:color="000000"/>'
+        f'  <w:bottom w:val="single" w:sz="8" w:space="0" w:color="000000"/>'
+        f'  <w:insideH w:val="single" w:sz="4" w:space="0" w:color="D0D0D0"/>'
+        f'  <w:left w:val="none"/>'
+        f'  <w:right w:val="none"/>'
+        f'  <w:insideV w:val="none"/>'
+        f'</w:tblBorders>'
+    )
+    tblPr.append(borders)
+
 def set_cell_margins(cell, top=100, bottom=100, left=150, right=150):
     tcPr = cell._tc.get_or_add_tcPr()
     tcMar = OxmlElement('w:tcMar')
@@ -67,121 +159,55 @@ def set_cell_shading(cell, color_hex):
     shading_elm = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{color_hex}"/>')
     cell._tc.get_or_add_tcPr().append(shading_elm)
 
-def set_table_borders(table, color="CCCCCC", sz="4", val="single"):
-    tblPr = table._tbl.tblPr
-    borders = parse_xml(
-        f'<w:tblBorders {nsdecls("w")}>'
-        f'  <w:top w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>'
-        f'  <w:bottom w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>'
-        f'  <w:insideH w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>'
-        f'  <w:left w:val="none"/>'
-        f'  <w:right w:val="none"/>'
-        f'  <w:insideV w:val="none"/>'
-        f'</w:tblBorders>'
-    )
-    tblPr.append(borders)
-
-def add_p(text, bold=False, italic=False, size=Pt(11.5), align=WD_ALIGN_PARAGRAPH.LEFT, space_before=Pt(0), space_after=Pt(4), color=RGBColor(0, 0, 0)):
-    p = doc.add_paragraph()
-    p.alignment = align
-    p.paragraph_format.space_before = space_before
-    p.paragraph_format.space_after = space_after
-    p.paragraph_format.line_spacing = 1.15
-    run = p.add_run(text)
-    run.bold = bold
-    run.italic = italic
-    run.font.name = 'Times New Roman'
-    run.font.size = size
-    run.font.color.rgb = color
-    return p
-
-def add_chapter_header(chap_num, title):
-    doc.add_page_break()
+def add_ieee_table_caption(table_num, table_title):
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p.paragraph_format.space_before = Pt(12)
+    p.paragraph_format.space_before = Pt(10)
     p.paragraph_format.space_after = Pt(2)
-    r1 = p.add_run(f"Chapter {chap_num}\n")
-    r1.font.name = 'Times New Roman'
-    r1.font.size = Pt(18)
-    r1.bold = True
-    r2 = p.add_run(title)
-    r2.font.name = 'Times New Roman'
-    r2.font.size = Pt(16)
-    r2.bold = True
-    p.paragraph_format.space_after = Pt(16)
+    r1 = p.add_run(f"TABLE {table_num}\n")
+    enforce_tnr(r1, size=Pt(10), bold=True)
+    r2 = p.add_run(table_title.upper())
+    enforce_tnr(r2, size=Pt(9.5), bold=True)
+    p.paragraph_format.space_after = Pt(5)
 
-def add_sec(title):
-    p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(12)
-    p.paragraph_format.space_after = Pt(4)
-    run = p.add_run(title)
-    run.font.name = 'Times New Roman'
-    run.font.size = Pt(13)
-    run.bold = True
-    return p
-
-def add_subsec(title):
-    p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(8)
-    p.paragraph_format.space_after = Pt(2)
-    run = p.add_run(title)
-    run.font.name = 'Times New Roman'
-    run.font.size = Pt(11.5)
-    run.bold = True
-    return p
-
-def add_bullet(text):
-    p = doc.add_paragraph(style='List Bullet')
-    p.paragraph_format.space_before = Pt(0)
-    p.paragraph_format.space_after = Pt(2)
-    p.paragraph_format.line_spacing = 1.15
-    run = p.add_run(text)
-    run.font.name = 'Times New Roman'
-    run.font.size = Pt(11.5)
-    return p
-
-def add_caption(text, is_table=True):
-    p = doc.add_paragraph()
-    p.alignment = WD_ALIGN_PARAGRAPH.CENTER if not is_table else WD_ALIGN_PARAGRAPH.LEFT
-    p.paragraph_format.space_before = Pt(6) if is_table else Pt(4)
-    p.paragraph_format.space_after = Pt(3) if is_table else Pt(8)
-    run = p.add_run(text)
-    run.font.name = 'Times New Roman'
-    run.font.size = Pt(10)
-    run.bold = True
-    return p
-
-def add_fig(filename, caption_text, width_inches=5.8):
+def add_ieee_fig(filename, fig_num, fig_title, width_inches=5.6):
     path = os.path.join(fig_dir, filename)
     if os.path.exists(path):
         p = doc.add_paragraph()
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p.paragraph_format.space_before = Pt(6)
+        p.paragraph_format.space_before = Pt(8)
         p.paragraph_format.space_after = Pt(2)
         run = p.add_run()
         run.add_picture(path, width=Inches(width_inches))
-        add_caption(caption_text, is_table=False)
+        
+        # IEEE Figure Caption below figure
+        p_cap = doc.add_paragraph()
+        p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p_cap.paragraph_format.space_before = Pt(3)
+        p_cap.paragraph_format.space_after = Pt(8)
+        r_num = p_cap.add_run(f"Fig. {fig_num}. ")
+        enforce_tnr(r_num, size=Pt(9.5), bold=True)
+        r_title = p_cap.add_run(fig_title)
+        enforce_tnr(r_title, size=Pt(9.5), italic=True)
     else:
         print(f"Warning: Figure not found at {path}")
 
-def format_academic_table(table, col_widths, headers, data, align_cols=None):
-    set_table_borders(table)
+def format_ieee_table(table, col_widths, headers, data, align_cols=None):
+    set_ieee_table_borders(table)
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
 
     # Header Row
     hdr_cells = table.rows[0].cells
     for i, header_text in enumerate(headers):
         hdr_cells[i].text = header_text
-        set_cell_shading(hdr_cells[i], "EFEFEF")
-        set_cell_margins(hdr_cells[i], top=120, bottom=120, left=150, right=150)
+        set_cell_shading(hdr_cells[i], "F2F2F2")
+        set_cell_margins(hdr_cells[i], top=120, bottom=120, left=140, right=140)
         p = hdr_cells[i].paragraphs[0]
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER if align_cols and align_cols[i] == 'C' else WD_ALIGN_PARAGRAPH.LEFT
         p.paragraph_format.space_after = Pt(0)
+        p.paragraph_format.line_spacing = 1.05
         for r in p.runs:
-            r.font.name = 'Times New Roman'
-            r.font.size = Pt(10.5)
-            r.bold = True
+            enforce_tnr(r, size=Pt(10), bold=True)
 
     # Data Rows
     for row_idx, row_data in enumerate(data):
@@ -189,25 +215,25 @@ def format_academic_table(table, col_widths, headers, data, align_cols=None):
         for col_idx, cell_value in enumerate(row_data):
             cell = row.cells[col_idx]
             cell.text = str(cell_value)
-            set_cell_margins(cell, top=90, bottom=90, left=150, right=150)
+            set_cell_margins(cell, top=80, bottom=80, left=140, right=140)
             if row_idx % 2 == 1:
-                set_cell_shading(cell, "F9F9F9")
+                set_cell_shading(cell, "FAFAFA")
             p = cell.paragraphs[0]
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER if align_cols and align_cols[col_idx] == 'C' else WD_ALIGN_PARAGRAPH.LEFT
             p.paragraph_format.space_after = Pt(0)
+            p.paragraph_format.line_spacing = 1.05
             for r in p.runs:
-                r.font.name = 'Times New Roman'
-                r.font.size = Pt(10)
+                enforce_tnr(r, size=Pt(9.5))
 
-    # Column Widths
+    # Apply Column Widths
     for row in table.rows:
         for idx, width in enumerate(col_widths):
             row.cells[idx].width = width
 
-print("Building Title Page and Front Matter...")
+print("Building Title Page and Front Matter (IEEE Times New Roman)...")
 
 # =============================================================
-# TITLE PAGE (Matching SLA3.pdf Page 1)
+# TITLE PAGE (Matching SLA3.pdf Page 1 with IEEE Typography)
 # =============================================================
 add_p("Shah & Anchor Kutchhi Engineering College", bold=True, size=Pt(16), align=WD_ALIGN_PARAGRAPH.CENTER, space_before=Pt(12), space_after=Pt(2))
 add_p("Chembur, Mumbai, Maharashtra, India 400088", size=Pt(12), align=WD_ALIGN_PARAGRAPH.CENTER, space_after=Pt(2))
@@ -231,7 +257,7 @@ add_p("Submitted by:", bold=True, size=Pt(11), align=WD_ALIGN_PARAGRAPH.CENTER, 
 
 # Student Table (Matching Page 1 of SLA3.pdf)
 t_student = doc.add_table(rows=2, cols=4)
-format_academic_table(
+format_ieee_table(
     t_student,
     [Inches(0.8), Inches(1.2), Inches(2.2), Inches(2.3)],
     ["Sr. No.", "Roll No.", "Permanent Reg. No.", "Full Name of Student"],
@@ -347,33 +373,28 @@ toc_entries = [
     ("  11.2 HUD and Diegetic Telemetry Design Proposal", "23"),
     ("  11.3 Performance Improvements", "24"),
     ("12 Conclusion", "25"),
-    ("References", "26"),
+    ("References", "26")
 ]
 
 for title, page_str in toc_entries:
     p_toc = doc.add_paragraph()
+    p_toc.alignment = WD_ALIGN_PARAGRAPH.LEFT
     p_toc.paragraph_format.space_before = Pt(0)
     p_toc.paragraph_format.space_after = Pt(1)
     p_toc.paragraph_format.line_spacing = 1.15
     dots_count = max(4, 75 - len(title) - len(page_str))
     dots = " . " * (dots_count // 3)
     r_t = p_toc.add_run(title)
-    r_t.font.name = 'Times New Roman'
-    r_t.font.size = Pt(10.5)
-    if title.startswith("Appendix") or title[0].isdigit() or title in ["Abstract", "References"]:
-        r_t.bold = True
+    is_bold = title[0].isdigit() or title in ["Abstract", "References"]
+    enforce_tnr(r_t, size=Pt(10.5), bold=is_bold)
     r_d = p_toc.add_run(f" {dots} ")
-    r_d.font.name = 'Times New Roman'
-    r_d.font.size = Pt(10)
-    r_d.font.color.rgb = RGBColor(120, 120, 120)
+    enforce_tnr(r_d, size=Pt(10), color=RGBColor(120, 120, 120))
     r_p = p_toc.add_run(page_str)
-    r_p.font.name = 'Times New Roman'
-    r_p.font.size = Pt(10.5)
-    r_p.bold = True
+    enforce_tnr(r_p, size=Pt(10.5), bold=True)
 
 add_p("iv", size=Pt(10), align=WD_ALIGN_PARAGRAPH.CENTER, space_before=Pt(24))
 
-print("Writing Chapter 1: Introduction...")
+print("Writing Chapter 1: Introduction (IEEE Formatting)...")
 
 # =============================================================
 # CHAPTER 1: INTRODUCTION
@@ -413,7 +434,7 @@ add_p(
     "threat suppression, and the deployable Firewall Shield for projectile deflection."
 )
 
-add_fig("fig01_project_overview.png", "Figure 1.1: SENTINEL-XR Project Overview and Core Architecture", width_inches=5.6)
+add_ieee_fig("fig01_project_overview.png", "1.1", "SENTINEL-XR Project Overview and Core Architecture", width_inches=5.6)
 
 add_sec("1.3 Motivation")
 add_p(
@@ -438,7 +459,7 @@ add_p(
     "implementations, enemy AI state machines, player health/shield invariants, and tool systems. Chapter 8 presents gameplay pacing, input "
     "mappings, and HUD telemetry feedback. Chapter 9 presents automated regression test methodologies, PlayMode physics validation, and test results. "
     "Chapter 10 reviews challenges encountered and professional learning outcomes. Chapter 11 discusses future enhancement roadmaps, and Chapter 12 "
-    "Chapter 12 concludes the study, followed by formal references."
+    "concludes the study, followed by formal references."
 )
 
 print("Writing Chapter 2: Problem Definition and Objectives...")
@@ -482,9 +503,9 @@ add_p(
     "Table 2.1 documents these criteria alongside their verified evidence and recorded implementation status."
 )
 
-add_caption("Table 2.1: Project Success Criteria and Verification Status", is_table=True)
+add_ieee_table_caption("2.1", "Project Success Criteria and Verification Status")
 t_success = doc.add_table(rows=9, cols=3)
-format_academic_table(
+format_ieee_table(
     t_success,
     [Inches(0.6), Inches(2.8), Inches(2.8)],
     ["No.", "Success Criterion", "Evidence / Recorded Status"],
@@ -555,9 +576,9 @@ add_p(
     "PROTOCOL are summarized in Table 4.1."
 )
 
-add_caption("Table 4.1: Software Requirements and Environment Specifications", is_table=True)
+add_ieee_table_caption("4.1", "Software Requirements and Environment Specifications")
 t_sw = doc.add_table(rows=9, cols=3)
-format_academic_table(
+format_ieee_table(
     t_sw,
     [Inches(2.0), Inches(2.0), Inches(2.2)],
     ["Software / Component", "Version / Configuration", "Purpose"],
@@ -580,9 +601,9 @@ add_p(
     "in Table 4.2."
 )
 
-add_caption("Table 4.2: Development Hardware Specifications", is_table=True)
+add_ieee_table_caption("4.2", "Development Hardware Workstation Specifications")
 t_hw = doc.add_table(rows=6, cols=2)
-format_academic_table(
+format_ieee_table(
     t_hw,
     [Inches(2.8), Inches(3.4)],
     ["Hardware Component", "Development Workstation Specification"],
@@ -634,27 +655,27 @@ add_p(
     "mapping without inducing severe GPU rasterization bottlenecks."
 )
 
-add_fig("fig06_mission01_obsidian_palette.png", "Figure 5.1: Obsidian Neural Palette and URP Post-Processing Composition", width_inches=5.4)
+add_ieee_fig("fig06_mission01_obsidian_palette.png", "5.1", "Obsidian Neural Palette and URP Post-Processing Composition", width_inches=5.4)
 
 add_sec("5.3 C# Scripting")
 add_p(
     "Gameplay logic, player locomotion, weapon mechanics, enemy AI, and UI telemetry are authored in modern C# (.NET Standard 2.1). The codebase "
-    "strictly adheres to clean object-oriented design principles, leveraging interfaces (`IDamageable`), delegates and C# events (`Action<T>`), "
+    "strictly adheres to clean object-oriented design principles, leveraging interfaces (IDamageable), delegates and C# events (Action<T>), "
     "and robust singleton patterns with scene lifecycle safeguards."
 )
 
 add_sec("5.4 New Input System")
 add_p(
-    "Unity's New Input System (`com.unity.inputsystem`) provides action-based input abstraction. Rather than hardcoding legacy polling calls "
-    "(`Input.GetKey`), input actions are defined as discrete logical intents (`Move`, `Look`, `Sprint`, `Jump`, `Fire`, `QuickPatch`, `SelectTool`). "
+    "Unity's New Input System (com.unity.inputsystem) provides action-based input abstraction. Rather than hardcoding legacy polling calls "
+    "(Input.GetKey), input actions are defined as discrete logical intents (Move, Look, Sprint, Jump, Fire, QuickPatch, SelectTool). "
     "This separation ensures that desktop keyboard/mouse controls can be swapped or augmented with XR controller inputs without refactoring "
     "underlying locomotion or combat systems."
 )
 
 add_sec("5.5 CharacterController")
 add_p(
-    "Player locomotion is governed by Unity's `CharacterController` component. Unlike fully simulated `Rigidbody` dynamics, which can suffer "
-    "from physics jitter, unwanted friction snagging, and erratic torque rotation, the `CharacterController` provides deterministic, collision-aware "
+    "Player locomotion is governed by Unity's CharacterController component. Unlike fully simulated Rigidbody dynamics, which can suffer "
+    "from physics jitter, unwanted friction snagging, and erratic torque rotation, the CharacterController provides deterministic, collision-aware "
     "movement. Horizontal translation, vertical gravity acceleration, ground detection, and jump velocity are precisely integrated in script."
 )
 
@@ -662,8 +683,8 @@ add_sec("5.6 Defensive Tools and Raycast Mechanics")
 add_p(
     "Combat interaction relies on high-precision physics raycasting, spherical overlaps, and barrier collisions. The Trace Scanner casts forward "
     "conical rays to sample corrupted node signatures; the Patch Tool fires continuous forward raycasts to apply repair points; the Quarantine "
-    "Pulse executes an instantaneous `Physics.OverlapSphere` to stun nearby entities; and the Firewall Shield instantiates a physical collider "
-    "tagged `FirewallShield` that deflects hostile projectiles via trigger physics."
+    "Pulse executes an instantaneous Physics.OverlapSphere to stun nearby entities; and the Firewall Shield instantiates a physical collider "
+    "tagged FirewallShield that deflects hostile projectiles via trigger physics."
 )
 
 add_sec("5.7 AI-Assisted Development")
@@ -688,7 +709,7 @@ add_p(
     "below:"
 )
 
-# Architectural ASCII Flow Diagram (Matching SLA3.pdf style)
+# Architectural ASCII Flow Diagram (Clean IEEE Style)
 add_p(
     "KEYBOARD / MOUSE INPUT (New Input System)\n"
     "          │\n"
@@ -708,7 +729,7 @@ add_p(
     "    ├── Mission01Controller (Enemy Wave Spawning)\n"
     "    ├── SentinelAudioSystem (Event-Driven N=1 Listener)\n"
     "    └── MissionHUD (Glass Telemetry & Dynamic Waypoint Navigation)",
-    bold=False, size=Pt(9.5), align=WD_ALIGN_PARAGRAPH.LEFT, space_before=Pt(6), space_after=Pt(8)
+    bold=False, size=Pt(9), align=WD_ALIGN_PARAGRAPH.LEFT, space_before=Pt(6), space_after=Pt(8)
 )
 
 add_sec("6.2 Main Modules")
@@ -717,9 +738,9 @@ add_p(
     "Table 6.1."
 )
 
-add_caption("Table 6.1: System Modules and Technical Responsibilities", is_table=True)
+add_ieee_table_caption("6.1", "System Modules and Technical Responsibilities")
 t_mod = doc.add_table(rows=10, cols=2)
-format_academic_table(
+format_ieee_table(
     t_mod,
     [Inches(2.4), Inches(3.8)],
     ["System Module", "Engineering Responsibility"],
@@ -740,9 +761,9 @@ format_academic_table(
 add_sec("6.3 Damage Interface and Interaction Design")
 add_p(
     "To prevent brittle, tightly coupled dependencies between weapons and targets, all entities capable of taking damage or being repaired "
-    "implement modular interfaces. The `IDamageable` interface requires implementers to expose `TakeDamage(float amount)`, `Health`, "
-    "`MaxHealth`, and `IsDead`. Similarly, `CyberNetworkNode` encapsulates sector infrastructure with dedicated `TakeCorruptionDamage(float)` "
-    "and `RepairNode(float)` methods, dispatching static events (`OnNodeUnderAttack`, `OnNodeIntegrityChanged`, `OnNodeSecured`) that allow the "
+    "implement modular interfaces. The IDamageable interface requires implementers to expose TakeDamage(float amount), Health, "
+    "MaxHealth, and IsDead. Similarly, CyberNetworkNode encapsulates sector infrastructure with dedicated TakeCorruptionDamage(float) "
+    "and RepairNode(float) methods, dispatching static events (OnNodeUnderAttack, OnNodeIntegrityChanged, OnNodeSecured) that allow the "
     "HUD and objective manager to respond without holding direct references."
 )
 
@@ -750,23 +771,23 @@ add_sec("6.4 Scene Design")
 add_p(
     "Mission 01: Signal in the Noise is laid out across a structured 60 m x 60 m cyber containment grid. The operator spawns "
     "at an elevated observation deck at (0, 1.1, -10), providing immediate, unobstructed sightlines across the central cyber corridor. "
-    "The critical `Node_DMZGateway` is situated 22 meters forward at coordinates (0, 0, 12), while the rogue `BreachCoreAlpha` "
+    "The critical Node_DMZGateway is situated 22 meters forward at coordinates (0, 0, 12), while the rogue BreachCoreAlpha "
     "is housed inside an elevated containment chamber at (0, 4, 30). Perimeter forcefields bound the arena, and modular server rack obstacles "
     "provide tactical cover."
 )
 
-add_fig("fig05_mission01_arena_layout.png", "Figure 6.1: Mission 01 Containment Grid Layout and Spatial Zoning", width_inches=5.5)
+add_ieee_fig("fig05_mission01_arena_layout.png", "6.1", "Mission 01 Containment Grid Layout and Spatial Zoning", width_inches=5.5)
 
 add_sec("6.5 Data Flow During Infiltration and Defense")
 add_p(
     "A typical tactical sequence illustrates the event-driven data flow across subsystems:\n"
-    "1. Trojan Infiltrator reaches `Node_DMZGateway` and initiates its 3.5-second arrival telegraph.\n"
-    "2. `SentinelAudioSystem` triggers a procedural dual-tone alert klaxon.\n"
-    "3. Trojan begins draining gateway integrity at 3.5 HP/s; `CyberNetworkNode` dispatches `OnNodeUnderAttack`.\n"
-    "4. `MissionHUD` catches the event, rendering a flashing critical alert banner and activating the dynamic relative waypoint guide (`[▲ 14m]`).\n"
+    "1. Trojan Infiltrator reaches Node_DMZGateway and initiates its 3.5-second arrival telegraph.\n"
+    "2. SentinelAudioSystem triggers a procedural dual-tone alert klaxon.\n"
+    "3. Trojan begins draining gateway integrity at 3.5 HP/s; CyberNetworkNode dispatches OnNodeUnderAttack.\n"
+    "4. MissionHUD catches the event, rendering a flashing critical alert banner and activating the dynamic relative waypoint guide ([▲ 14m]).\n"
     "5. Operator navigates to the gateway, equips Patch Tool (Key [2]), and holds [LMB].\n"
-    "6. `PatchTool` casts forward raycasts, applying continuous +25 HP/s repairs while manual quick-patch [E] provides +35 HP bursts.\n"
-    "7. When gateway integrity reaches 100%, `CyberNetworkNode.OnNodeSecured` fires, advancing the objective pipeline to Stage 3."
+    "6. PatchTool casts forward raycasts, applying continuous +25 HP/s repairs while manual quick-patch [E] provides +35 HP bursts.\n"
+    "7. When gateway integrity reaches 100%, CyberNetworkNode.OnNodeSecured fires, advancing the objective pipeline to Stage 3."
 )
 
 print("Writing Chapter 7: Implementation Details...")
@@ -779,12 +800,12 @@ add_chapter_header(7, "Implementation Details")
 add_sec("7.1 Project Organisation")
 add_p(
     "To maintain strict engineering hygiene, all project assets, scripts, scenes, and prefabs are organized into standardized functional "
-    "directories under `Assets/`, as documented in Table 7.1."
+    "directories under Assets/, as documented in Table 7.1."
 )
 
-add_caption("Table 7.1: Project Folder Organization and Role Hierarchy", is_table=True)
+add_ieee_table_caption("7.1", "Project Folder Organization and Role Hierarchy")
 t_org = doc.add_table(rows=8, cols=2)
-format_academic_table(
+format_ieee_table(
     t_org,
     [Inches(2.5), Inches(3.7)],
     ["Project Directory Path", "Contents and Engineering Role"],
@@ -802,75 +823,75 @@ format_academic_table(
 
 add_sec("7.2 Player Input")
 add_p(
-    "Player input is managed through `PlayerInputActions.inputactions` and read via `SentinelPlayerController.cs`. Movement vectors (WASD), "
+    "Player input is managed through PlayerInputActions.inputactions and read via SentinelPlayerController.cs. Movement vectors (WASD), "
     "mouse look deltas, sprint toggles (Left Shift), jump triggers (Space), tool cycling (Keys 1-4), and primary fire (Left Mouse Button) are "
     "read as event callbacks, preventing direct dependency on legacy hardware polling."
 )
 
 add_sec("7.3 First-Person Controller")
 add_p(
-    "`SentinelPlayerController.cs` translates movement input into horizontal translation scaled by walk speed (4.5 m/s) or tactical sprint "
+    "SentinelPlayerController.cs translates movement input into horizontal translation scaled by walk speed (4.5 m/s) or tactical sprint "
     "speed (7.5 m/s). Mouse horizontal movement rotates the player root transform around the vertical Y-axis (yaw), while vertical mouse "
-    "movement rotates `PlayerCamera` around the local X-axis (pitch). Pitch is strictly clamped between -80.0^\° (looking down) and +80.0^\° "
-    "(looking up) to prevent gimbal inversion. Eye height is established at 1.6 meters with a 75.0^\° field of view."
+    "movement rotates PlayerCamera around the local X-axis (pitch). Pitch is strictly clamped between -80.0° (looking down) and +80.0° "
+    "(looking up) to prevent gimbal inversion. Eye height is established at 1.6 meters with a 75.0° field of view."
 )
 
-add_fig("fig07_sentinel_player_inspector.png", "Figure 7.1: SentinelPlayerController Inspector Configuration", width_inches=5.4)
+add_ieee_fig("fig07_sentinel_player_inspector.png", "7.1", "SentinelPlayerController Inspector Configuration", width_inches=5.4)
 
 add_sec("7.4 Defensive Tool Input Events")
 add_p(
-    "`ToolInventory.cs` maintains the operator's active tool state (`TraceScanner`, `PatchTool`, `QuarantinePulse`, `FirewallShield`) and enforces "
+    "ToolInventory.cs maintains the operator's active tool state (TraceScanner, PatchTool, QuarantinePulse, FirewallShield) and enforces "
     "a maximum energy pool of 100 units. Tool selection is invoked via keys [1] through [4] or mouse wheel cycling. When a valid tool change occurs, "
-    "the inventory fires the strongly typed `OnToolSelected(CyberToolType)` event. Duplicate keypresses of the already active tool are cleanly "
+    "the inventory fires the strongly typed OnToolSelected(CyberToolType) event. Duplicate keypresses of the already active tool are cleanly "
     "suppressed by a guard clause, preventing redundant state reinitialization."
 )
 
 add_sec("7.5 Threat Entity AI")
 add_p(
-    "All hostile entities inherit from `EnemyBase.cs`. Malware Worms execute continuous ground pursuit (2.5 m/s), closing to melee range "
-    "(1.6 m) before delivering 10 damage attacks governed by an enforced 2.0-second cooldown. Trojan Infiltrators possess "
-    "cloak cloaking shaders, navigating to `Node_DMZGateway` where they decloak, telegraph for 3.5 seconds, and inject corruption at "
-    "3.5 HP/s. Ransomware Tanks operate as heavy disruptors, emitting shockwaves, while Breach Core Alpha hovers at the sector center, "
-    "firing volleys of physical `MaliciousPacketProjectile` prefabs."
+    "All hostile entities inherit from EnemyBase.cs. Malware Worms execute continuous ground pursuit (2.5 m/s), closing to melee range "
+    "(1.6 m) before delivering 10 damage attacks governed by an enforced 2.0-second cooldown. Trojan Infiltrators possess cloak shaders, "
+    "navigating to Node_DMZGateway where they decloak, telegraph for 3.5 seconds, and inject corruption at 3.5 HP/s. Ransomware Tanks "
+    "operate as heavy disruptors, emitting shockwaves, while Breach Core Alpha hovers at the sector center, firing volleys of physical "
+    "MaliciousPacketProjectile prefabs."
 )
 
-add_fig("fig09_enemy_threat_entities.png", "Figure 7.2: Hostile Threat Archetypes: Malware Worm, Trojan, and Ransomware Tank", width_inches=5.5)
+add_ieee_fig("fig09_enemy_threat_entities.png", "7.2", "Hostile Threat Archetypes: Malware Worm, Trojan, and Ransomware Tank", width_inches=5.5)
 
 add_sec("7.6 Threat Health and Defeat")
 add_p(
     "Each threat tracks discrete health: Worms possess 30 HP, Trojans 45 HP, Tanks 120 HP, and Breach Core 300 HP. "
-    "Upon receiving lethal damage, `Die()` disables AI navigation and physics colliders, triggers a procedural dissolution effect, awards operator "
-    "score points, and dispatches `OnEnemyDefeated(EnemyBase)` to advance the objective kill counter before scheduling clean runtime destruction."
+    "Upon receiving lethal damage, Die() disables AI navigation and physics colliders, triggers a procedural dissolution effect, awards operator "
+    "score points, and dispatches OnEnemyDefeated(EnemyBase) to advance the objective kill counter before scheduling clean runtime destruction."
 )
 
 add_sec("7.7 Player Health and Shield Invariant")
 add_p(
-    "`SentinelPlayerController.cs` enforces a robust **shield-first damage absorption invariant**. The player begins with 100 Health and "
+    "SentinelPlayerController.cs enforces a robust shield-first damage absorption invariant. The player begins with 100 Health and "
     "100 Shield. When incoming damage D is received:\n"
-    "• If  Shield > 0:   Absorb  = min(Shield, D),   Shield = Shield - Absorb,   D = D - Absorb\n"
-    "• If  D > 0:   Health = max(0, Health - D)\n"
+    "• If Shield > 0: Absorb = min(Shield, D), Shield = Shield - Absorb, D = D - Absorb\n"
+    "• If D > 0: Health = max(0, Health - D)\n"
     "Health is strictly clamped to 0.0 HP and can never drop below zero. An initial 8.0-second spawn protection window negates "
-    "all damage while allowing full control freedom. Player death is idempotent: `Die()` executes exactly once, halts incoming attacks, and transitions "
-    "the game state to `MissionFailed`."
+    "all damage while allowing full control freedom. Player death is idempotent: Die() executes exactly once, halts incoming attacks, and transitions "
+    "the game state to MissionFailed."
 )
 
 add_sec("7.8 Defensive Tools System")
 add_p(
     "The defensive tool implementations provide distinct tactical utility:\n"
-    "• **Trace Scanner (`TraceScanner.cs`):** Projects a conical raycast. When focused on a corrupted node for 3.0 seconds, it completes "
+    "• Trace Scanner (TraceScanner.cs): Projects a conical raycast. When focused on a corrupted node for 3.0 seconds, it completes "
     "Objective 01 and reveals threat signatures.\n"
-    "• **Patch Tool (`PatchTool.cs`):** Casts forward raycasts up to 8.0 meters, restoring node integrity at +25.0 HP/s.\n"
-    "• **Quarantine Pulse (`QuarantinePulse.cs`):** Discharges an instantaneous 8.0-meter spherical pulse that stuns threats for 3.0 seconds.\n"
-    "• **Firewall Shield (`FirewallShield.cs`):** Deploys an energy barrier with 150 HP tagged `FirewallShield` that physically blocks and "
+    "• Patch Tool (PatchTool.cs): Casts forward raycasts up to 8.0 meters, restoring node integrity at +25.0 HP/s.\n"
+    "• Quarantine Pulse (QuarantinePulse.cs): Discharges an instantaneous 8.0-meter spherical pulse that stuns threats for 3.0 seconds.\n"
+    "• Firewall Shield (FirewallShield.cs): Deploys an energy barrier with 150 HP tagged FirewallShield that physically blocks and "
     "deflects incoming projectile volleys."
 )
 
-add_fig("fig08_defensive_tools_system.png", "Figure 7.3: Defensive Cyber-Tools Arsenal and Deployment Mechanics", width_inches=5.5)
+add_ieee_fig("fig08_defensive_tools_system.png", "7.3", "Defensive Cyber-Tools Arsenal and Deployment Mechanics", width_inches=5.5)
 
 add_sec("7.9 Materials and Visuals")
 add_p(
     "The visual language of SENTINEL-XR is established through custom URP lit and unlit materials featuring metallic smoothness, rim emission, "
-    "and dark obsidian glass. Forcefield barriers utilize additive transparency with pulsing UV coordinates. `SentinelAudioSystem.cs` reinforces "
+    "and dark obsidian glass. Forcefield barriers utilize additive transparency with pulsing UV coordinates. SentinelAudioSystem.cs reinforces "
     "visual actions with synthesized procedural audio tones (40 ms to 180 ms sine/square bursts) delivered at 2D HUD spatial blend."
 )
 
@@ -884,27 +905,27 @@ add_chapter_header(8, "Gameplay and User Controls")
 add_sec("8.1 Gameplay Sequence")
 add_p(
     "Mission 01: Signal in the Noise unfolds across an intuitive eight-step tactical gameplay sequence:\n"
-    "1. **Bootstrap Initialization:** `BootstrapScene` loads foundational singletons (`GameManager`, `SentinelAudioSystem`) and transitions to Main Menu.\n"
-    "2. **Sector Deployment:** Operator selects 'Engage Mission 01' from the Main Menu, loading the containment sector.\n"
-    "3. **Spawn Protection & Onboarding:** Operator spawns at (0, 1.1, -10) on the observation deck with 8.0 seconds of damage immunity.\n"
-    "4. **Objective 01 (Trace Signal):** Operator equips Trace Scanner [1], identifies anomalous breach signatures, and scans to 100%.\n"
-    "5. **Objective 02 (Gateway Defense):** Trojan decloaks at `Node_DMZGateway`. Operator follows the dynamic HUD waypoint arrow (`[▲ 14m]`), "
+    "1. Bootstrap Initialization: BootstrapScene loads foundational singletons (GameManager, SentinelAudioSystem) and transitions to Main Menu.\n"
+    "2. Sector Deployment: Operator selects 'Engage Mission 01' from the Main Menu, loading the containment sector.\n"
+    "3. Spawn Protection & Onboarding: Operator spawns at (0, 1.1, -10) on the observation deck with 8.0 seconds of damage immunity.\n"
+    "4. Objective 01 (Trace Signal): Operator equips Trace Scanner [1], identifies anomalous breach signatures, and scans to 100%.\n"
+    "5. Objective 02 (Gateway Defense): Trojan decloaks at Node_DMZGateway. Operator follows the dynamic HUD waypoint arrow ([▲ 14m]), "
     "equips Patch Tool [2], and repairs gateway to 100%.\n"
-    "6. **Objective 03 (Threat Containment):** Hostile waves spawn. Operator utilizes Quarantine Pulse [3] and Firewall Shield [4] to purge 5 threats.\n"
-    "7. **Objective 04 (Neutralize Core):** Breach Core Alpha drops its barrier. Operator deflects packet volleys and destroys core integrity.\n"
-    "8. **Mission Debrief:** Victory state triggers `MissionDebriefUI`, displaying completion time, enemies neutralized, and subnet integrity."
+    "6. Objective 03 (Threat Containment): Hostile waves spawn. Operator utilizes Quarantine Pulse [3] and Firewall Shield [4] to purge 5 threats.\n"
+    "7. Objective 04 (Neutralize Core): Breach Core Alpha drops its barrier. Operator deflects packet volleys and destroys core integrity.\n"
+    "8. Mission Debrief: Victory state triggers MissionDebriefUI, displaying completion time, enemies neutralized, and subnet integrity."
 )
 
-add_fig("fig04_main_menu_interface.png", "Figure 8.1: Main Menu User Interface and Mission Engagement Flow", width_inches=5.2)
+add_ieee_fig("fig04_main_menu_interface.png", "8.1", "Main Menu User Interface and Mission Engagement Flow", width_inches=5.2)
 
 add_sec("8.2 Control Table")
 add_p(
     "The complete desktop keyboard and mouse input mappings for SENTINEL-XR are documented in Table 8.1."
 )
 
-add_caption("Table 8.1: Player Keyboard and Mouse Control Mappings", is_table=True)
+add_ieee_table_caption("8.1", "Player Keyboard and Mouse Control Mappings")
 t_ctrl = doc.add_table(rows=11, cols=3)
-format_academic_table(
+format_ieee_table(
     t_ctrl,
     [Inches(1.8), Inches(1.8), Inches(2.6)],
     ["Action Intent", "Hardware Input Binding", "Functional Description"],
@@ -925,14 +946,14 @@ format_academic_table(
 
 add_sec("8.3 Gameplay Feedback and HUD Telemetry")
 add_p(
-    "The `MissionHUD.cs` glass interface delivers immediate, uncluttered situational awareness across dedicated viewport zones: top-left "
+    "The MissionHUD.cs glass interface delivers immediate, uncluttered situational awareness across dedicated viewport zones: top-left "
     "displays operator Health (100) and Shield (100) bars; bottom-left displays Tool Energy (100) and the active tool icon; top-right presents "
     "Subnet Integrity and real-time DMZ Gateway integrity percentage; and top-center renders the dynamic objective directive. Infiltration "
-    "events trigger an animated amber-red critical alert banner alongside directional waypoint arrows (`◄`, `▲`, `►`, `▼`) with exact distance "
+    "events trigger an animated amber-red critical alert banner alongside directional waypoint arrows (◄, ▲, ►, ▼) with exact distance "
     "in meters, ensuring the operator is never lost within the containment sector."
 )
 
-add_fig("fig12_mission_hud_glass_zones.png", "Figure 8.2: MissionHUD Glass Architecture and Combat Telemetry Zones", width_inches=5.5)
+add_ieee_fig("fig12_mission_hud_glass_zones.png", "8.2", "MissionHUD Glass Architecture and Combat Telemetry Zones", width_inches=5.5)
 
 print("Writing Chapter 9: Testing and Results...")
 
@@ -944,9 +965,9 @@ add_chapter_header(9, "Testing and Results")
 add_sec("9.1 Testing Approach")
 add_p(
     "SENTINEL-XR employed a rigorous dual-tier automated testing methodology executed directly inside Unity 6 using the Unity Test Framework "
-    "(`com.unity.test-framework`). Rather than relying exclusively on manual ad-hoc playtesting, the project implemented 15 isolated EditMode "
+    "(com.unity.test-framework). Rather than relying exclusively on manual ad-hoc playtesting, the project implemented 15 isolated EditMode "
     "NUnit unit tests and 4 PlayMode physics integration tests. EditMode tests validate mathematical contracts, cooldown timers, and state "
-    "transitions without physics scene overhead, while PlayMode tests run as real-time coroutines (`[UnityTest]`) validating true 3D Rigidbody "
+    "transitions without physics scene overhead, while PlayMode tests run as real-time coroutines ([UnityTest]) validating true 3D Rigidbody "
     "trigger collisions, projectile deflections, and object destruction lifecycles."
 )
 
@@ -955,9 +976,9 @@ add_p(
     "The 15 automated EditMode regression test cases and their verified results are detailed in Table 9.1."
 )
 
-add_caption("Table 9.1: Automated EditMode Regression Test Suite Results", is_table=True)
+add_ieee_table_caption("9.1", "Automated EditMode Regression Test Suite Results")
 t_test = doc.add_table(rows=16, cols=4)
-format_academic_table(
+format_ieee_table(
     t_test,
     [Inches(0.6), Inches(2.8), Inches(1.0), Inches(1.8)],
     ["ID", "Automated Test Case Name", "Result", "Verified Contract / Metric"],
@@ -984,24 +1005,24 @@ format_academic_table(
 add_sec("9.3 Compilation Result")
 add_p(
     "The Unity 6 Roslyn compiler and Bee backend verified zero compilation errors and zero warnings across all runtime, editor, and test "
-    "assemblies (`SentinelXR.dll`, `SentinelXR.Editor.dll`, `SentinelXR.Tests.EditMode.dll`, `SentinelXR.Tests.PlayMode.dll`). Previous compilation "
-    "issues—such as CS1061 in `MissionHUD.cs` regarding `OnToolSelected` and namespace resolution for `CyberNetworkNode`—were completely resolved."
+    "assemblies (SentinelXR.dll, SentinelXR.Editor.dll, SentinelXR.Tests.EditMode.dll, SentinelXR.Tests.PlayMode.dll). Previous compilation "
+    "issues—such as CS1061 in MissionHUD.cs regarding OnToolSelected and namespace resolution for CyberNetworkNode—were completely resolved."
 )
 
-add_fig("fig14_test_runner_editmode.png", "Figure 9.1: Unity Editor Test Runner EditMode Results (15/15 Passed)", width_inches=5.4)
+add_ieee_fig("fig14_test_runner_editmode.png", "9.1", "Unity Editor Test Runner EditMode Results (15/15 Passed)", width_inches=5.4)
 
 add_sec("9.4 Play Mode Result")
 add_p(
-    "All four registered PlayMode test coroutines executed successfully via the `TestRunnerApi`:\n"
-    "• `PlayMode_Test01_RealSpawnProtectionTimerAndExpiration`: Confirmed real-time clock advancement, damage immunity rejection during the window, "
-    "and normal damage vulnerability upon expiration (**PASS**).\n"
-    "• `PlayMode_Test02_ProjectilePhysicsCollisionAndSingleHit`: Verified true 3D physics trigger collision, single-hit damage application, and clean "
-    "runtime `Destroy()` (**PASS**).\n"
-    "• `PlayMode_Test03_FirewallShieldDeflectsProjectile`: Verified physical barrier deflection, `FirewallShield` tag validation, and 0 player damage (**PASS**).\n"
-    "• `PlayMode_Test04_ProjectileDoesNotDamageDeadPlayer`: Confirmed collision passthrough and zero health alteration for deceased player instances (**PASS**)."
+    "All four registered PlayMode test coroutines executed successfully via the TestRunnerApi:\n"
+    "• PlayMode_Test01_RealSpawnProtectionTimerAndExpiration: Confirmed real-time clock advancement, damage immunity rejection during the window, "
+    "and normal damage vulnerability upon expiration (PASS).\n"
+    "• PlayMode_Test02_ProjectilePhysicsCollisionAndSingleHit: Verified true 3D physics trigger collision, single-hit damage application, and clean "
+    "runtime Destroy() (PASS).\n"
+    "• PlayMode_Test03_FirewallShieldDeflectsProjectile: Verified physical barrier deflection, FirewallShield tag validation, and 0 player damage (PASS).\n"
+    "• PlayMode_Test04_ProjectileDoesNotDamageDeadPlayer: Confirmed collision passthrough and zero health alteration for deceased player instances (PASS)."
 )
 
-add_fig("fig15_test_runner_playmode.png", "Figure 9.2: Unity TestRunnerApi PlayMode Results (4/4 Passed)", width_inches=5.4)
+add_ieee_fig("fig15_test_runner_playmode.png", "9.2", "Unity TestRunnerApi PlayMode Results (4/4 Passed)", width_inches=5.4)
 
 add_sec("9.5 Known Issues / Pending Verification")
 add_p(
@@ -1009,7 +1030,7 @@ add_p(
     "for future project milestones:\n"
     "• Full end-to-end human speedrun playthrough from Bootstrap to Boss defeat pending live user recording.\n"
     "• Multi-mission campaign persistence is not yet wired to external database storage.\n"
-    "• Final standalone Windows `.exe` packaging is verified via build scripts but pending physical distribution testing."
+    "• Final standalone Windows .exe packaging is verified via build scripts but pending physical distribution testing."
 )
 
 print("Writing Chapter 10: Challenges and Learning Outcomes...")
@@ -1022,26 +1043,26 @@ add_chapter_header(10, "Challenges and Learning Outcomes")
 add_sec("10.1 Challenges Encountered")
 add_p(
     "During development and stabilization, several intricate technical challenges were encountered and successfully resolved:\n"
-    "• **Missing AudioListener Console Spam:** Unity emitted 234+ missing listener warnings across scene transitions because no camera possessed "
-    "an `AudioListener`. This was resolved by serializing listeners onto camera prefabs and introducing an event-driven handover in `SentinelAudioSystem`.\n"
-    "• **Mission 01 Gateway Difficulty Spike:** `Node_DMZGateway` began at 35% HP while the Trojan drained 8.0 HP/s with zero telegraph, collapsing "
+    "• Missing AudioListener Console Spam: Unity emitted 234+ missing listener warnings across scene transitions because no camera possessed "
+    "an AudioListener. This was resolved by serializing listeners onto camera prefabs and introducing an event-driven handover in SentinelAudioSystem.\n"
+    "• Mission 01 Gateway Difficulty Spike: Node_DMZGateway began at 35% HP while the Trojan drained 8.0 HP/s with zero telegraph, collapsing "
     "the gateway in 4.3 seconds before the player could traverse the arena. Rebalancing gateway starting integrity to 50%, reducing drain to 3.5 HP/s, "
     "and adding a 3.5s telegraph grace period resolved the bottleneck.\n"
-    "• **Projectile Rigidbody MissingComponentException:** PlayMode test fixtures instantiated test projectiles that lacked `Rigidbody` components, "
+    "• Projectile Rigidbody MissingComponentException: PlayMode test fixtures instantiated test projectiles that lacked Rigidbody components, "
     "causing null exceptions during kinematic property assignment. Auditing production prefabs and test fixtures eliminated the failure.\n"
-    "• **ToolInventory Event Contract (CS1061):** `MissionHUD.cs` attempted to subscribe to `OnToolSelected` which was initially missing from "
-    "`ToolInventory.cs`. Exposing `public event Action<CyberToolType> OnToolSelected` cleanly harmonized the contract."
+    "• ToolInventory Event Contract (CS1061): MissionHUD.cs attempted to subscribe to OnToolSelected which was initially missing from "
+    "ToolInventory.cs. Exposing public event Action<CyberToolType> OnToolSelected cleanly harmonized the contract."
 )
 
 add_sec("10.2 Learning Outcomes")
 add_p(
     "The engineering of SENTINEL-XR yielded vital professional competencies across modern software and game development:\n"
-    "• **Event-Driven Architectural Discipline:** Understanding that decoupling systems via C# events and interfaces drastically reduces coupling, "
+    "• Event-Driven Architectural Discipline: Understanding that decoupling systems via C# events and interfaces drastically reduces coupling, "
     "eliminates circular dependencies, and enables clean automated unit testing.\n"
-    "• **Gameplay Balancing & Pacing:** Experiencing firsthand how raw mathematical values dictate player perception of fairness; telegraphing and "
+    "• Gameplay Balancing & Pacing: Experiencing firsthand how raw mathematical values dictate player perception of fairness; telegraphing and "
     "directional HUD guidance are essential for player comprehension.\n"
-    "• **Automated In-Engine Testing:** Mastering the Unity Test Framework for both EditMode logic testing and PlayMode physics simulation.\n"
-    "• **Audio Systems Lifecycle Management:** Gaining deep knowledge of Unity's audio engine invariants, ensuring exactly one active listener "
+    "• Automated In-Engine Testing: Mastering the Unity Test Framework for both EditMode logic testing and PlayMode physics simulation.\n"
+    "• Audio Systems Lifecycle Management: Gaining deep knowledge of Unity's audio engine invariants, ensuring exactly one active listener "
     "persists without per-frame CPU polling."
 )
 
@@ -1064,9 +1085,9 @@ add_p(
     "enhancements, their developmental priority, and technical purpose."
 )
 
-add_caption("Table 11.1: Proposed Future Enhancements and Technical Objectives", is_table=True)
+add_ieee_table_caption("11.1", "Proposed Future Enhancements and Technical Objectives")
 t_fut = doc.add_table(rows=6, cols=3)
-format_academic_table(
+format_ieee_table(
     t_fut,
     [Inches(1.2), Inches(2.2), Inches(2.8)],
     ["Priority", "Proposed Enhancement", "Technical Purpose / Engineering Rationale"],
@@ -1126,45 +1147,47 @@ add_p(
     "establishing a verified, extensible foundation for the future of immersive virtual reality cyber-defense simulation."
 )
 
-add_fig("fig16_mission_completion_debrief.png", "Figure 12.1: Mission 01 Successful Completion and Debriefing Interface", width_inches=5.2)
+add_ieee_fig("fig16_mission_completion_debrief.png", "12.1", "Mission 01 Successful Completion and Debriefing Interface", width_inches=5.2)
 
-print("Writing References & Bibliography...")
+print("Writing References & Bibliography (IEEE Citation Style)...")
 
 # =============================================================
-# REFERENCES / BIBLIOGRAPHY (Matching SLA3.pdf Page 31)
+# REFERENCES / BIBLIOGRAPHY (IEEE Numbered Citation Style)
 # =============================================================
 doc.add_page_break()
 add_p("References", bold=True, size=Pt(16), align=WD_ALIGN_PARAGRAPH.CENTER, space_before=Pt(12), space_after=Pt(16))
 
 refs = [
-    "[1] Unity Technologies. Unity User Manual (6000.0 LTS). Available: https://docs.unity3d.com/Manual/ (accessed Oct. 2026).",
-    "[2] Unity Technologies. Unity C# Scripting API Reference. Available: https://docs.unity3d.com/ScriptReference/ (accessed Oct. 2026).",
-    "[3] Unity Technologies. Input System Package Documentation (com.unity.inputsystem). Available: https://docs.unity3d.com/Packages/com.unity.inputsystem@latest (accessed Oct. 2026).",
-    "[4] Unity Technologies. Universal Render Pipeline (URP) Manual. Available: https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest (accessed Oct. 2026).",
-    "[5] Unity Technologies. CharacterController Component Guide. Available: https://docs.unity3d.com/Manual/class-CharacterController.html (accessed Oct. 2026).",
-    "[6] Unity Technologies. Physics.Raycast and Trigger Collisions. Available: https://docs.unity3d.com/ScriptReference/Physics.Raycast.html (accessed Oct. 2026).",
-    "[7] Microsoft Corporation. C# Language and .NET Architecture Guide. Available: https://learn.microsoft.com/dotnet/csharp/ (accessed Oct. 2026).",
-    "[8] Google DeepMind. Antigravity AI-Assisted Agentic Coding Environment (used during development and automated verification, Oct. 2026)."
+    "[1] Unity Technologies, \"Unity User Manual (6000.0 LTS),\" Unity Documentation, Oct. 2026. [Online]. Available: https://docs.unity3d.com/Manual/",
+    "[2] Unity Technologies, \"Unity C# Scripting API Reference,\" Unity Documentation, Oct. 2026. [Online]. Available: https://docs.unity3d.com/ScriptReference/",
+    "[3] Unity Technologies, \"Input System Package Documentation,\" com.unity.inputsystem, Oct. 2026. [Online]. Available: https://docs.unity3d.com/Packages/com.unity.inputsystem@latest",
+    "[4] Unity Technologies, \"Universal Render Pipeline (URP) Manual,\" Unity Documentation, Oct. 2026. [Online]. Available: https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest",
+    "[5] Unity Technologies, \"CharacterController Component Guide,\" Unity Manual, Oct. 2026. [Online]. Available: https://docs.unity3d.com/Manual/class-CharacterController.html",
+    "[6] Unity Technologies, \"Physics.Raycast and Trigger Collisions,\" Unity Script Reference, Oct. 2026. [Online]. Available: https://docs.unity3d.com/ScriptReference/Physics.Raycast.html",
+    "[7] Microsoft Corporation, \"C# Language and .NET Architecture Guide,\" Microsoft Learn, Oct. 2026. [Online]. Available: https://learn.microsoft.com/dotnet/csharp/",
+    "[8] Google DeepMind, \"Antigravity AI-Assisted Agentic Coding Environment,\" Technical Architecture Report, Oct. 2026."
 ]
 
 for ref in refs:
     p_ref = doc.add_paragraph()
+    p_ref.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    p_ref.paragraph_format.left_indent = Inches(0.3)
+    p_ref.paragraph_format.first_line_indent = Inches(-0.3)
     p_ref.paragraph_format.space_before = Pt(0)
     p_ref.paragraph_format.space_after = Pt(4)
     p_ref.paragraph_format.line_spacing = 1.15
     run = p_ref.add_run(ref)
-    run.font.name = 'Times New Roman'
-    run.font.size = Pt(10)
+    enforce_tnr(run, size=Pt(10))
 
 # -------------------------------------------------------------
-# SAVE DOCX
+# 5. SAVE DOCX
 # -------------------------------------------------------------
-print(f"Saving compiled academic document to: {docx_path}")
+print(f"Saving compiled IEEE-formatted academic document to: {docx_path}")
 doc.save(docx_path)
 print("DOCX successfully generated.")
 
 # -------------------------------------------------------------
-# CONVERT TO PDF VIA MICROSOFT WORD COM
+# 6. CONVERT TO PDF VIA MICROSOFT WORD COM
 # -------------------------------------------------------------
 print("Exporting native PDF via Microsoft Word COM automation...")
 try:
@@ -1183,4 +1206,4 @@ try:
 except Exception as ex:
     print(f"Word COM PDF export encountered an error: {ex}")
 
-print("Build Complete.")
+print("IEEE Build Complete.")
