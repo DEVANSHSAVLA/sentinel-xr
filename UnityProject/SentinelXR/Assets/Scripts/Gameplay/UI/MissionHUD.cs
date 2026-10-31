@@ -56,6 +56,7 @@ namespace SentinelXR.Gameplay.UI
 
         private void OnEnable()
         {
+            AcquireReferences();
             BindEvents();
         }
 
@@ -64,10 +65,15 @@ namespace SentinelXR.Gameplay.UI
             UnbindEvents();
         }
 
+        private void OnDestroy()
+        {
+            UnbindEvents();
+        }
+
         private void AcquireReferences()
         {
             if (player == null) player = SentinelPlayerController.Instance;
-            if (inventory == null) inventory = ToolInventory.Instance;
+            if (inventory == null) inventory = ToolInventory.Instance ?? FindObjectOfType<ToolInventory>();
             if (interaction == null) interaction = FindObjectOfType<PlayerInteraction>();
             if (objectives == null) objectives = MissionObjectiveManager.Instance;
             if (scanner == null) scanner = FindObjectOfType<Tools.TraceScanner>();
@@ -146,6 +152,7 @@ namespace SentinelXR.Gameplay.UI
             if (player == null || inventory == null || breachCore == null)
             {
                 AcquireReferences();
+                BindEvents();
             }
 
             if (hitFlashTimer > 0f) hitFlashTimer -= Time.deltaTime;

@@ -25,6 +25,7 @@ namespace SentinelXR.Gameplay.Player
         public float ToolEnergy => currentToolEnergy;
         public float MaxToolEnergy => maxToolEnergy;
 
+        public event Action<CyberToolType> OnToolSelected;
         public event Action<CyberToolType> OnToolChanged;
 
         private void Awake()
@@ -86,6 +87,7 @@ namespace SentinelXR.Gameplay.Player
 
             activeTool = tool;
             Debug.Log($"[ToolInventory] Active defensive cyber tool: {activeTool}");
+            OnToolSelected?.Invoke(activeTool);
             OnToolChanged?.Invoke(activeTool);
         }
 
