@@ -348,9 +348,6 @@ toc_entries = [
     ("  11.3 Performance Improvements", "24"),
     ("12 Conclusion", "25"),
     ("References", "26"),
-    ("Appendix A: Project Structure", "27"),
-    ("Appendix B: Build and Test Checklist", "28"),
-    ("Appendix C: Details to Complete Before Submission", "29")
 ]
 
 for title, page_str in toc_entries:
@@ -441,7 +438,7 @@ add_p(
     "implementations, enemy AI state machines, player health/shield invariants, and tool systems. Chapter 8 presents gameplay pacing, input "
     "mappings, and HUD telemetry feedback. Chapter 9 presents automated regression test methodologies, PlayMode physics validation, and test results. "
     "Chapter 10 reviews challenges encountered and professional learning outcomes. Chapter 11 discusses future enhancement roadmaps, and Chapter 12 "
-    "concludes the study. Supplementary project structures, checklists, and administrative details are compiled in Appendices A, B, and C."
+    "Chapter 12 concludes the study, followed by formal references."
 )
 
 print("Writing Chapter 2: Problem Definition and Objectives...")
@@ -1158,103 +1155,6 @@ for ref in refs:
     run = p_ref.add_run(ref)
     run.font.name = 'Times New Roman'
     run.font.size = Pt(10)
-
-print("Writing Appendices A, B, and C...")
-
-# =============================================================
-# APPENDIX A: PROJECT STRUCTURE (Matching SLA3.pdf Page 32)
-# =============================================================
-doc.add_page_break()
-add_p("Appendix A", bold=True, size=Pt(16), align=WD_ALIGN_PARAGRAPH.CENTER, space_before=Pt(12), space_after=Pt(4))
-add_p("Project Structure", bold=True, size=Pt(14), align=WD_ALIGN_PARAGRAPH.CENTER, space_after=Pt(12))
-
-add_p(
-    "The following directory tree summarizes the primary folder and asset hierarchy utilized in the SENTINEL-XR Unity project:"
-)
-
-# Clean ASCII Folder Hierarchy (Matching SLA3.pdf style)
-add_p(
-    "SentinelXR/\n"
-    "├── Assets/\n"
-    "│   ├── Scripts/\n"
-    "│   │   ├── Gameplay/\n"
-    "│   │   │   ├── Player/        (SentinelPlayerController.cs, ToolInventory.cs, PlayerInteraction.cs)\n"
-    "│   │   │   ├── Enemies/       (EnemyBase.cs, EnemyTrojanInfiltrator.cs, MaliciousPacketProjectile.cs)\n"
-    "│   │   │   ├── Tools/         (TraceScanner.cs, PatchTool.cs, QuarantinePulse.cs, FirewallShield.cs)\n"
-    "│   │   │   ├── Environment/   (CyberNetworkNode.cs, NodeConnectionBeam.cs, SectorBarrier.cs)\n"
-    "│   │   │   ├── Missions/      (Mission01Controller.cs, MissionObjectiveManager.cs, GameManager.cs)\n"
-    "│   │   │   ├── UI/            (MissionHUD.cs, MissionDebriefUI.cs, MainMenuController.cs)\n"
-    "│   │   │   └── SentinelAudioSystem.cs (Event-driven AudioListener & procedural waveforms)\n"
-    "│   ├── Scenes/\n"
-    "│   │   ├── BootstrapScene.unity\n"
-    "│   │   ├── MainMenuScene.unity\n"
-    "│   │   └── Mission01_SignalInTheNoise.unity\n"
-    "│   ├── Prefabs/           (Player_Sentinel.prefab, Enemy prefabs, Tool barriers)\n"
-    "│   ├── Materials/         (Obsidian Glass, Neon Cyan/Amber, Forcefield URP materials)\n"
-    "│   ├── Editor/            (SentinelCombatTestRunner.cs, SentinelBuildPipeline.cs)\n"
-    "│   └── Tests/\n"
-    "│       ├── EditMode/      (Mission01CombatRegressionTests.cs - 15 Tests)\n"
-    "│       └── PlayMode/      (Mission01CombatPlayModeTests.cs - 4 Tests)\n"
-    "├── ProjectSettings/       (TagManager.asset, InputActions, QualitySettings.asset)\n"
-    "└── Packages/              (URP 17.0.3, Input System 1.7.0, Test Framework 1.4.5)",
-    bold=False, size=Pt(9), align=WD_ALIGN_PARAGRAPH.LEFT, space_before=Pt(6), space_after=Pt(8)
-)
-
-add_fig("fig17_project_folder_structure.png", "Figure A.1: Unity Editor Project Hierarchy and Assembly Structure", width_inches=5.4)
-
-# =============================================================
-# APPENDIX B: BUILD AND TEST CHECKLIST (Matching SLA3.pdf Page 33)
-# =============================================================
-doc.add_page_break()
-add_p("Appendix B", bold=True, size=Pt(16), align=WD_ALIGN_PARAGRAPH.CENTER, space_before=Pt(12), space_after=Pt(4))
-add_p("Build and Test Checklist", bold=True, size=Pt(14), align=WD_ALIGN_PARAGRAPH.CENTER, space_after=Pt(12))
-
-checklist_items = [
-    "Open the existing SENTINEL-XR project in Unity 6 LTS (6000.0.23f1).",
-    "Allow initial package cache and shader asset compilation to complete cleanly.",
-    "Verify the Unity Console reports zero red compiler errors and zero warnings.",
-    "Open Window > General > Test Runner.",
-    "Execute all 15 EditMode tests; confirm 15/15 PASS (100%).",
-    "Execute all 4 PlayMode tests; confirm 4/4 PASS (100%).",
-    "Open Assets/Scenes/BootstrapScene.unity and enter Play Mode.",
-    "Confirm seamless transition to MainMenuScene; verify UI click audio.",
-    "Select 'Engage Mission 01'; verify loading into Mission01_SignalInTheNoise.",
-    "Verify exactly one enabled AudioListener resides on the active PlayerCamera.",
-    "Confirm 8.0-second spawn protection banner appears and player movement is responsive.",
-    "Equip Trace Scanner [1], aim at corrupted node, and complete Objective 01.",
-    "Observe Trojan infiltration alert banner; follow directional waypoint arrow [▲ 14m] to Node_DMZGateway.",
-    "Equip Patch Tool [2], apply repair raycasts, and restore gateway integrity to 100%.",
-    "Deploy Firewall Shield [4] and Quarantine Pulse [3] to contain hostile threat waves.",
-    "Engage and neutralize Breach Core Alpha; confirm victory debrief screen displays final statistics.",
-    "Press key [R] to verify instantaneous health, shield, tool, and objective restart.",
-    "When ready, trigger headless standalone Windows build via SentinelBuildPipeline."
-]
-
-for item in checklist_items:
-    add_bullet(item)
-
-# =============================================================
-# APPENDIX C: DETAILS TO COMPLETE BEFORE SUBMISSION (Matching SLA3.pdf Page 34)
-# =============================================================
-doc.add_page_break()
-add_p("Appendix C", bold=True, size=Pt(16), align=WD_ALIGN_PARAGRAPH.CENTER, space_before=Pt(12), space_after=Pt(4))
-add_p("Details to Complete Before Submission", bold=True, size=Pt(14), align=WD_ALIGN_PARAGRAPH.CENTER, space_after=Pt(12))
-
-submission_items = [
-    "Verify student identity data on Title Page: DEVANSH SAVLA, Roll No. 56, PRN: 23UF18356CM172, Class B.TECH-03-56.",
-    "Confirm assigned Faculty Guide Name and Designation with the Department of Computer Engineering.",
-    "Obtain physical signatures on the official Certificate endorsement page:",
-    "  - Faculty Project Guide Signature",
-    "  - Head of Department (Computer Engineering) Signature",
-    "  - External Examiner Signature",
-    "  - Institutional Principal / Directorate Endorsement Seal",
-    "Confirm final submission date stamped by the college examination coordinator.",
-    "Verify all 17 embedded screenshots and architecture diagrams print with high visual contrast.",
-    "Ensure final report is bound following Shah & Anchor Kutchhi Engineering College B.Tech SLA guidelines."
-]
-
-for s_item in submission_items:
-    add_bullet(s_item)
 
 # -------------------------------------------------------------
 # SAVE DOCX
